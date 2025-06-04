@@ -7,52 +7,63 @@ This is the invoice app backend
 classDiagram
     class User {
         +String id
+        +String name
+        +String phoneNumber
         +String email
-        +String senha
-        +String nomeEmpresa
+        +String password
+        +String document // CPF/CNPJ
     }
 
-    class Cliente {
+    class Address {
+        +String street
+        +String number
+        +String district
+        +String complement
+        +String city
+        +String state
+        +String country
+    }
+
+    class Client {
         +String id
-        +String nome
-        +String telefone
+        +String name
+        +String phoneNumber
         +String email
-        +String cpfOuCnpj
-        +String endereco
-        +String userId
+        +String password
+        +String document // CPF/CNPJ
+        +String ownerId
     }
 
-    class Produto {
+    class Product {
         +String id
-        +String nome
-        +String descricao
-        +BigDecimal preco
-        +String categoria
-        +int estoque
-        +String userId
+        +String name
+        +String description
+        +BigDecimal price
+        +String category
+        +int stock
     }
 
-    class Orcamento {
+    class Invoice {
         +String id
-        +String clienteId
+        +String clientId
         +String userId
-        +LocalDateTime data
-        +List~ItemProduto~ itens
-        +BigDecimal desconto
+        +LocalDateTime date
+        +List~ProductItem~ items
+        +BigDecimal discount
         +BigDecimal total
     }
 
-    class ItemProduto {
-        +String produtoId
-        +String nome
-        +int quantidade
-        +BigDecimal precoUnitario
+    class ProductItem {
+        +String productId
+        +String name
+        +int quantity
+        +BigDecimal unitPrice
         +BigDecimal subtotal
     }
 
     class AuthRequest {
         +String email
-        +String senha
+        +String password
     }
 
     class AuthResponse {
@@ -65,9 +76,11 @@ classDiagram
         +String extractUsername(String token)
     }
 
-    User "1" --> "*" Cliente : possui
-    User "1" --> "*" Produto : possui
-    User "1" --> "*" Orcamento : gera
-    Orcamento "1" --> "*" ItemProduto : contém
-    Orcamento "1" --> "1" Cliente : para
+    User "1" --> "*" Client : manages
+    User "1" *-- "1" Address : has
+    User "1" --> "*" Product : owns
+    User "1" --> "*" Invoice : creates
+    Client "1" *-- "1" Address : has
+    Invoice "1" --> "*" ProductItem : contains
+    Invoice "1" --> "1" Client : belongsTo
 ```
