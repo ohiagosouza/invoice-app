@@ -1,0 +1,228 @@
+openapi: 3.0.3
+info:
+  title: Sistema de Orçamentos
+  description: API para cadastro de usuários, clientes, produtos e geração de orçamentos com autenticação JWT.
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8080/api
+
+paths:
+  /auth/login:
+    post:
+      tags: [Auth]
+      summary: Realiza o login e retorna um token JWT
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthRequest'
+      responses:
+        '200':
+          description: Autenticado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+
+  /users:
+    post:
+      tags: [User]
+      summary: Cadastra um novo usuário
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: Usuário criado
+
+  /clients:
+    post:
+      tags: [Client]
+      summary: Cadastra um novo cliente
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Client'
+      responses:
+        '201':
+          description: Cliente cadastrado
+
+    get:
+      tags: [Client]
+      summary: Lista todos os clientes do usuário logado
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de clientes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Client'
+
+  /products:
+    post:
+      tags: [Product]
+      summary: Cadastra um novo produto
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '201':
+          description: Produto cadastrado
+
+    get:
+      tags: [Product]
+      summary: Lista todos os produtos do usuário
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de produtos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+
+  /invoices:
+    post:
+      tags: [Invoice]
+      summary: Cria um novo orçamento (invoice)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Invoice'
+      responses:
+        '201':
+          description: Orçamento criado
+
+    get:
+      tags: [Invoice]
+      summary: Lista todos os orçamentos
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de orçamentos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Invoice'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+
+    AuthRequest:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      required: [email, password]
+
+    AuthResponse:
+      type: object
+      properties:
+        token:
+          type: string
+
+    Address:
+      type: object
+      properties:
+        street: { type: string }
+        number: { type: string }
+        district: { type: string }
+        complement: { type: string }
+        city: { type: string }
+        state: { type: string }
+        country: { type: string }
+        zipCode: { type: string }
+
+    User:
+      type: object
+      properties:
+        id: { type: string }
+        name: { type: string }
+        phoneNumber: { type: string }
+        email: { type: string }
+        password: { type: string }
+        document: { type: string }
+        address:
+          $ref: '#/components/schemas/Address'
+
+    Client:
+      type: object
+      properties:
+        id: { type: string }
+        name: { type: string }
+        phoneNumber: { type: string }
+        email: { type: string }
+        password: { type: string }
+        document: { type: string }
+        ownerId: { type: string }
+        address:
+          $ref: '#/components/schemas/Address'
+
+    Product:
+      type: object
+      properties:
+        id: { type: string }
+        name: { type: string }
+        description: { type: string }
+        price: { type: number, format: double }
+        category: { type: string }
+        stock: { type: integer }
+
+    ProductItem:
+      type: object
+      properties:
+        productId: { type: string }
+        name: { type: string }
+        quantity: { type: integer }
+        unitPrice: { type: number, format: double }
+        subtotal: { type: number, format: double }
+
+    Invoice:
+      type: object
+      properties:
+        id: { type: string }
+        clientId: { type: string }
+        userId: { type: string }
+        date: { type: string, format: date-time }
+        discount: { type: number, format: double }
+        total: { type: number, format: double }
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductItem'
