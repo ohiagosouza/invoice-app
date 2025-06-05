@@ -7,7 +7,7 @@
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.5.0</version>
 	</parent>
-	<groupId>com.hiagosouza</groupId>
+	<groupId>com.hiagosouza.api</groupId>
 	<artifactId>quoted</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>quoted</name>
@@ -116,18 +116,18 @@
 				<version>7.13.0</version>
 				<executions>
 					<execution>
-						<id>generate-spring</id>
+						<id>quoted</id>
 						<goals>
 							<goal>generate</goal>
 						</goals>
 						<configuration>
 							<inputSpec>${project.basedir}/swagger.yaml</inputSpec>
 							<generatorName>spring</generatorName>
-							<apiPackage>com.hiagosouza.quoted.api</apiPackage>
-							<modelPackage>com.hiagosouza.quoted.model</modelPackage>
+							<apiPackage>com.hiagosouza.api.quoted.api</apiPackage>
+							<modelPackage>com.hiagosouza.api.quoted.model</modelPackage>
 							<configOptions>
 								<useJakartaEe>true</useJakartaEe>
-								<dateLibrary>java8</dateLibrary>
+								<dateLibrary>java8-localdatetime</dateLibrary>
 							</configOptions>
 						</configuration>
 					</execution>
@@ -150,7 +150,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<mainClass>com.hiagosouza.quoted.QuotedApplication</mainClass>
+					<mainClass>com.hiagosouza.api.quoted.QuotedApplication</mainClass>
 					<excludes>
 						<exclude>
 							<groupId>org.projectlombok</groupId>

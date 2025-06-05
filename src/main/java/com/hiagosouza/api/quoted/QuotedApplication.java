@@ -1,4 +1,4 @@
-package com.hiagosouza.quoted;
+package com.hiagosouza.api.quoted;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
