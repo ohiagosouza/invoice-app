@@ -1,10 +1,10 @@
-package com.hiagosouza.invoiceapp;
+package com.hiagosouza.quoted;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class quotedApplicationTests {
+class QuotedApplicationTests {
 
 	@Test
 	void contextLoads() {

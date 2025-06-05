@@ -1,13 +1,13 @@
-package com.hiagosouza.invoiceapp;
+package com.hiagosouza.quoted;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class quotedApplication {
+public class QuotedApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(quotedApplication.class, args);
+		SpringApplication.run(QuotedApplication.class, args);
 	}
 
 }
