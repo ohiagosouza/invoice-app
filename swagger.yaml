@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  title: Sistema de Orçamentos
+  title: Quoted Application
   description: API para cadastro de usuários, clientes, produtos e geração de orçamentos com autenticação JWT.
   version: 1.0.0
 

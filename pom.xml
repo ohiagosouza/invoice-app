@@ -6,12 +6,11 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.5.0</version>
-		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.hiagosouza</groupId>
-	<artifactId>invoiceapp</artifactId>
+	<artifactId>quoted</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>invoiceapp</name>
+	<name>quoted</name>
 	<description>Create Invoices</description>
 	<url/>
 	<licenses>
@@ -124,8 +123,8 @@
 						<configuration>
 							<inputSpec>${project.basedir}/swagger.yaml</inputSpec>
 							<generatorName>spring</generatorName>
-							<apiPackage>com.hiagosouza.invoiceapp.api</apiPackage>
-							<modelPackage>com.hiagosouza.invoiceapp.model</modelPackage>
+							<apiPackage>com.hiagosouza.quoted.api</apiPackage>
+							<modelPackage>com.hiagosouza.quoted.model</modelPackage>
 							<configOptions>
 								<useJakartaEe>true</useJakartaEe>
 								<dateLibrary>java8</dateLibrary>
@@ -151,7 +150,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<mainClass>com.hiagosouza.invoiceapp.InvoiceappApplication</mainClass>
+					<mainClass>com.hiagosouza.quoted.QuotedApplication</mainClass>
 					<excludes>
 						<exclude>
 							<groupId>org.projectlombok</groupId>
