@@ -58,7 +58,7 @@ paths:
 
     get:
       tags: [Client]
-      summary: Lista todos os clientes do usuário logado
+      summary: Lista todos os clientes
       security:
         - bearerAuth: []
       responses:
@@ -70,6 +70,59 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Client'
+
+  /clients/{id}:
+    get:
+      tags: [Client]
+      summary: Busca um cliente pelo ID
+      security: [ bearerAuth: [] ]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Cliente encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Client'
+
+    put:
+      tags: [Client]
+      summary: Atualiza os dados de um cliente
+      security: [ bearerAuth: [] ]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Client'
+      responses:
+        '200':
+          description: Cliente atualizado
+
+    delete:
+      tags: [Client]
+      summary: Remove um cliente
+      security: [ bearerAuth: [] ]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Cliente removido
 
   /products:
     post:
@@ -89,7 +142,7 @@ paths:
 
     get:
       tags: [Product]
-      summary: Lista todos os produtos do usuário
+      summary: Lista todos os produtos
       security:
         - bearerAuth: []
       responses:
@@ -102,10 +155,63 @@ paths:
                 items:
                   $ref: '#/components/schemas/Product'
 
+  /products/{id}:
+    get:
+      tags: [Product]
+      summary: Busca um produto pelo ID
+      security: [ bearerAuth: [] ]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Produto encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+
+    put:
+      tags: [Product]
+      summary: Atualiza os dados de um produto
+      security: [ bearerAuth: [] ]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '200':
+          description: Produto atualizado
+
+    delete:
+      tags: [Product]
+      summary: Remove um produto
+      security: [ bearerAuth: [] ]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Produto removido
+
   /invoices:
     post:
       tags: [Invoice]
-      summary: Cria um novo orçamento (invoice)
+      summary: Cria um novo orçamento
       security:
         - bearerAuth: []
       requestBody:
@@ -113,10 +219,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Invoice'
+              $ref: '#/components/schemas/InvoiceRequest'
       responses:
         '201':
           description: Orçamento criado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvoiceResponse'
 
     get:
       tags: [Invoice]
@@ -131,7 +241,40 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Invoice'
+                  $ref: '#/components/schemas/InvoiceResponse'
+
+  /invoices/{id}:
+    get:
+      tags: [Invoice]
+      summary: Busca um orçamento pelo ID
+      security: [ bearerAuth: [] ]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Orçamento encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvoiceResponse'
+
+    delete:
+      tags: [Invoice]
+      summary: Remove um orçamento
+      security: [ bearerAuth: [] ]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Orçamento removido
 
 components:
   securitySchemes:
@@ -145,17 +288,14 @@ components:
     AuthRequest:
       type: object
       properties:
-        email:
-          type: string
-        password:
-          type: string
+        email: { type: string }
+        password: { type: string }
       required: [email, password]
 
     AuthResponse:
       type: object
       properties:
-        token:
-          type: string
+        token: { type: string }
 
     Address:
       type: object
@@ -188,7 +328,6 @@ components:
         name: { type: string }
         phoneNumber: { type: string }
         email: { type: string }
-        password: { type: string }
         document: { type: string }
         ownerId: { type: string }
         address:
@@ -213,15 +352,25 @@ components:
         unitPrice: { type: number, format: double }
         subtotal: { type: number, format: double }
 
-    Invoice:
+    InvoiceRequest:
+      type: object
+      properties:
+        clientId: { type: string }
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductItem'
+        discount: { type: number, format: double }
+
+    InvoiceResponse:
       type: object
       properties:
         id: { type: string }
-        clientId: { type: string }
         userId: { type: string }
+        clientId: { type: string }
         date: { type: string, format: date-time }
-        discount: { type: number, format: double }
         total: { type: number, format: double }
+        discount: { type: number, format: double }
         items:
           type: array
           items:
