@@ -1,3 +1,5 @@
 #!/bin/bash
+echo "----BUILD STARTED----"
 mvn clean package -DskipTests
-sudo docker build -t quoted-app .
+sudo docker-compose up --build
+echo "----BUILD ENDED----"
