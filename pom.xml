@@ -126,6 +126,7 @@
 							<apiPackage>com.hiagosouza.api.quoted.api</apiPackage>
 							<modelPackage>com.hiagosouza.api.quoted.model</modelPackage>
 							<configOptions>
+								<interfaceOnly>true</interfaceOnly>
 								<useJakartaEe>true</useJakartaEe>
 								<dateLibrary>java8-localdatetime</dateLibrary>
 							</configOptions>
