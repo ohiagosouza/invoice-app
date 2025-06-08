@@ -11,7 +11,7 @@ services:
     depends_on:
       - mongodb
     environment:
-      SPRING_DATA_MONGODB_URI: mongodb://localhost:27017/invoices
+      SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/quoted-db
 
   mongodb:
     image: mongo:6
@@ -19,6 +19,7 @@ services:
     restart: always
     ports:
       - "27017:27017"
+    command: ["mongod", "--quiet"]
     volumes:
       - mongo_data:/data/db
 volumes:
