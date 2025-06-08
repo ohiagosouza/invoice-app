@@ -25,7 +25,6 @@ public class UserController extends BaseController implements ClientApi {
 
     @PostMapping("/public/user")
     public ResponseEntity<User> createUser(@Valid @RequestBody User user) {
-        System.out.println("----- START CREATE USER -----");
         User userModel = new User();
         userModel.setName(user.getName());
         userModel.setPhoneNumber(user.getPhoneNumber());
@@ -35,7 +34,10 @@ public class UserController extends BaseController implements ClientApi {
         userModel.setPassword(user.getPassword());
         userModel.setCreatedAt(LocalDateTime.now());
         userModel.setUpdatedAt(LocalDateTime.now());
+        userModel.setStatus(User.StatusEnum.ACTIVE);
+
         try {
+            System.out.println("----- START CREATE USER -----");
             userService.createUser(userModel);
             System.out.println("----- END CREATE USER -----");
         } catch (Exception e) {

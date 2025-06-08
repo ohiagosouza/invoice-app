@@ -352,6 +352,10 @@ components:
         email: { type: string }
         password: { type: string }
         document: { type: string }
+        status:
+          type: string
+          enum: [ ACTIVE, INACTIVE, SUSPENDED ]
+          default: ACTIVE
         createdAt: { type: string, format: date-time }
         updatedAt: { type: string, format: date-time }
         address:
@@ -406,6 +410,10 @@ components:
         id: { type: string }
         userId: { type: string }
         clientId: { type: string }
+        status:
+          type: string
+          enum: [ CREATED, ACCEPTED, REJECTED, OVERDUE, PAID, CANCELLED ]
+          default: CREATED
         createdAt: { type: string, format: date-time }
         updatedAt: { type: string, format: date-time }
         total: { type: number, format: double }
