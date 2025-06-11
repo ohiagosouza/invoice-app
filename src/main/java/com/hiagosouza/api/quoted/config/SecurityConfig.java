@@ -16,8 +16,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(auth -> auth
-                .requestMatchers(HttpMethod.POST ,"/api/v1/auth/**", "/api/v1/public/user").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/swagger-ui/index.html", "/api/v1/public/user/**").permitAll()
+                .requestMatchers(HttpMethod.POST ,"/api/v1/auth/login", "/api/v1/public/user/register").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                 .anyRequest().authenticated()
                 ).formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)

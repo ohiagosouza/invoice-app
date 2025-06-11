@@ -26,7 +26,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/AuthResponse'
 
-  /user:
+  /user/register:
     post:
       summary: Cadastra um novo usuário
       operationId: createUser
@@ -336,8 +336,8 @@ components:
       properties:
         street: { type: string }
         number: { type: string }
-        district: { type: string }
         complement: { type: string }
+        neighborhood: { type: string }
         city: { type: string }
         state: { type: string }
         country: { type: string }
@@ -352,6 +352,10 @@ components:
         email: { type: string }
         password: { type: string }
         document: { type: string }
+        planType:
+          type: string
+          enum: [ FREE, ESSENTIAL, PRO, ELITE  ]
+          default: FREE
         status:
           type: string
           enum: [ ACTIVE, INACTIVE, SUSPENDED ]
