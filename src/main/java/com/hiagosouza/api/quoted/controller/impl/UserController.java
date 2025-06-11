@@ -1,7 +1,9 @@
 package com.hiagosouza.api.quoted.controller.impl;
 
 import com.hiagosouza.api.quoted.api.ClientApi;
+import com.hiagosouza.api.quoted.api.UserApi;
 import com.hiagosouza.api.quoted.controller.BaseController;
+import com.hiagosouza.api.quoted.mapper.UserMapper;
 import com.hiagosouza.api.quoted.model.User;
 import com.hiagosouza.api.quoted.model.UserModel;
 import com.hiagosouza.api.quoted.services.UserService;
@@ -16,32 +18,25 @@ import java.util.Optional;
 
 @RestController
 @Log4j2
-public class UserController extends BaseController implements ClientApi {
+public class UserController extends BaseController implements UserApi {
     private final UserService userService;
 
     public UserController(UserService userService) {
         this.userService = userService;
     }
 
-    @PostMapping("/public/user")
-    public ResponseEntity<User> createUser(@Valid @RequestBody User user) {
-        User userModel = new User();
-        userModel.setName(user.getName());
-        userModel.setPhoneNumber(user.getPhoneNumber());
-        userModel.setEmail(user.getEmail());
-        userModel.setAddress(user.getAddress());
-        userModel.setDocument(user.getDocument());
-        userModel.setPassword(user.getPassword());
-        userModel.setCreatedAt(LocalDateTime.now());
-        userModel.setUpdatedAt(LocalDateTime.now());
-        userModel.setStatus(User.StatusEnum.ACTIVE);
+    @PostMapping("/public/user/register")
+    public ResponseEntity<User> createNewUser(@Valid @RequestBody User user) {
+        log.info("----- START CREATING USER -----");
+        user.setCreatedAt(LocalDateTime.now());
+        user.setUpdatedAt(LocalDateTime.now());
+        UserModel userModel = UserMapper.toModel(user);
 
         try {
-            System.out.println("----- START CREATE USER -----");
             userService.createUser(userModel);
-            System.out.println("----- END CREATE USER -----");
+           log.info("----- FINISHED CREATING USER -----");
         } catch (Exception e) {
-            System.out.println("----- END CREATE USER -----");
+            log.info("----- CONFLICT CREATING USER-----");
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
         return ResponseEntity.status(HttpStatus.CREATED).build();

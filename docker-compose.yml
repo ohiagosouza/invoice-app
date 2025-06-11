@@ -12,14 +12,12 @@ services:
       - mongodb
     environment:
       SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/quoted-db
-
   mongodb:
     image: mongo:6
     container_name: mongo
     restart: always
     ports:
       - "27017:27017"
-    command: ["mongod", "--quiet"]
     volumes:
       - mongo_data:/data/db
 volumes:

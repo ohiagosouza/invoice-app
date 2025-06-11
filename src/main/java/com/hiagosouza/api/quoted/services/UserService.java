@@ -19,8 +19,8 @@ public class UserService {
     }
 
     private final BCryptPasswordEncoder bCryptPassword = new BCryptPasswordEncoder();
-
-    public void createUser(User user) {
+    
+    public void createUser(UserModel user) {
 
         if (user != null
                 && findByDocument(user.getDocument()).isEmpty()
