@@ -10,12 +10,10 @@ import com.hiagosouza.api.quoted.security.JwtUtils;
 import com.hiagosouza.api.quoted.services.AuthLoginService;
 import com.hiagosouza.api.quoted.services.UserService;
 import jakarta.validation.Valid;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,23 +22,20 @@ import java.util.Optional;
 
 @RestController
 public class LoginController extends BaseController implements AuthApi {
-    @Autowired
+
     private final UserService userService;
+    private final BCryptPasswordEncoder passwordEncoder;
+    private final JwtUtils jwtUtils;
 
-
-    private AuthLoginService authLoginService;
-
-    private BCryptPasswordEncoder passwordEncoder;
-
-    @Autowired
-    private JwtUtils jwtUtils;
-
-    public LoginController(UserService userService) {
+    public LoginController(UserService userService, JwtUtils jwtUtils, BCryptPasswordEncoder passwordEncoder) {
         this.userService = userService;
+        this.jwtUtils = jwtUtils;
+        this.passwordEncoder = passwordEncoder;
     }
 
-    @GetMapping("/auth/login")
-    public ResponseEntity<?> authLogin(@RequestBody AuthRequest authRequest) {
+    @Override
+    @PostMapping("/auth/user/login")
+    public ResponseEntity<AuthResponse> userLogin(@Valid @RequestBody AuthRequest authRequest) {
         System.out.println("---- Login Request Started ----");
         Optional<UserModel> user = userService.findByEmail(authRequest.getEmail());
 
@@ -50,7 +45,7 @@ public class LoginController extends BaseController implements AuthApi {
         }
         AuthResponse authResponse = new AuthResponse();
         String token = jwtUtils.generateToken(user.get().getEmail());
-        return ResponseEntity.ok(authResponse.token(token));
+        return ResponseEntity.ok().body(authResponse.token(token));
 
     }
 }

@@ -8,9 +8,10 @@ servers:
   - url: http://localhost:8080/
 
 paths:
-  /auth/login:
+  /auth/user/login:
     post:
       tags: [Auth]
+      operationId: userLogin
       summary: Realiza o login e retorna um token JWT
       requestBody:
         required: true
@@ -40,7 +41,7 @@ paths:
         '201':
           description: Usuário criado
 
-  /client:
+  /client/register:
     post:
       tags: [Client]
       summary: Cadastra um novo cliente
@@ -56,7 +57,7 @@ paths:
       responses:
         '201':
           description: Cliente cadastrado
-  /clients:
+  /client/all:
     get:
       tags: [Client]
       summary: Lista todos os clientes
