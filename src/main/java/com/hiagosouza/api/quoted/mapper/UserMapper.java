@@ -1,5 +1,7 @@
 package com.hiagosouza.api.quoted.mapper;
 
+import com.hiagosouza.api.quoted.enums.PlanType;
+import com.hiagosouza.api.quoted.enums.UserStatus;
 import com.hiagosouza.api.quoted.model.AddressModel;
 import com.hiagosouza.api.quoted.model.User;
 import com.hiagosouza.api.quoted.model.UserModel;
@@ -13,8 +15,8 @@ public class UserMapper {
         userModel.setEmail(user.getEmail());
         userModel.setPassword(user.getPassword());
         userModel.setDocument(user.getDocument());
-        userModel.setPlanType(user.getPlanType());
-        userModel.setStatus(user.getStatus());
+        userModel.setPlanType(PlanType.valueOf(user.getPlanType().name()));
+        userModel.setStatus(UserStatus.valueOf(user.getStatus().name()));
         userModel.setCreatedAt(user.getCreatedAt());
         userModel.setUpdatedAt(user.getUpdatedAt());
 
