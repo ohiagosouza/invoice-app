@@ -7,10 +7,8 @@ import com.hiagosouza.api.quoted.model.AuthResponse;
 import com.hiagosouza.api.quoted.model.UserModel;
 
 import com.hiagosouza.api.quoted.security.JwtUtils;
-import com.hiagosouza.api.quoted.services.AuthLoginService;
 import com.hiagosouza.api.quoted.services.UserService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

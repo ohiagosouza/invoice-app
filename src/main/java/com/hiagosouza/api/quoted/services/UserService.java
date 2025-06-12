@@ -1,6 +1,5 @@
 package com.hiagosouza.api.quoted.services;
 
-import com.hiagosouza.api.quoted.model.User;
 import com.hiagosouza.api.quoted.model.UserModel;
 import com.hiagosouza.api.quoted.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

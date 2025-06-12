@@ -1,21 +1,15 @@
 package com.hiagosouza.api.quoted.controller.impl;
 
-import com.hiagosouza.api.quoted.api.ClientApi;
 import com.hiagosouza.api.quoted.api.UserApi;
 import com.hiagosouza.api.quoted.controller.BaseController;
 import com.hiagosouza.api.quoted.mapper.UserMapper;
-import com.hiagosouza.api.quoted.model.AuthRequest;
-import com.hiagosouza.api.quoted.model.AuthResponse;
 import com.hiagosouza.api.quoted.model.User;
 import com.hiagosouza.api.quoted.model.UserModel;
-import com.hiagosouza.api.quoted.security.JwtUtils;
 import com.hiagosouza.api.quoted.services.UserService;
 import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
