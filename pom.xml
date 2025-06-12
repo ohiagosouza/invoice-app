@@ -7,7 +7,7 @@
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.5.0</version>
 	</parent>
-	<groupId>com.hiagosouza</groupId>
+	<groupId>com.hiagosouza.api</groupId>
 	<artifactId>quoted</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>quoted</name>
@@ -95,6 +95,17 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-api</artifactId>
+			<version>2.24.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>2.24.3</version>
+		</dependency>
+
+		<dependency>
 			<groupId>jakarta.servlet</groupId>
 			<artifactId>jakarta.servlet-api</artifactId>
 			<version>6.1.0</version>
@@ -104,6 +115,12 @@
 			<groupId>io.swagger.core.v3</groupId>
 			<artifactId>swagger-annotations</artifactId>
 			<version>2.2.30</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+			<version>0.12.3</version>
 		</dependency>
 
 	</dependencies>
@@ -116,18 +133,19 @@
 				<version>7.13.0</version>
 				<executions>
 					<execution>
-						<id>generate-spring</id>
+						<id>quoted</id>
 						<goals>
 							<goal>generate</goal>
 						</goals>
 						<configuration>
 							<inputSpec>${project.basedir}/swagger.yaml</inputSpec>
 							<generatorName>spring</generatorName>
-							<apiPackage>com.hiagosouza.quoted.api</apiPackage>
-							<modelPackage>com.hiagosouza.quoted.model</modelPackage>
+							<apiPackage>com.hiagosouza.api.quoted.api</apiPackage>
+							<modelPackage>com.hiagosouza.api.quoted.model</modelPackage>
 							<configOptions>
+								<interfaceOnly>true</interfaceOnly>
 								<useJakartaEe>true</useJakartaEe>
-								<dateLibrary>java8</dateLibrary>
+								<dateLibrary>java8-localdatetime</dateLibrary>
 							</configOptions>
 						</configuration>
 					</execution>
@@ -150,7 +168,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<mainClass>com.hiagosouza.quoted.QuotedApplication</mainClass>
+					<mainClass>com.hiagosouza.api.quoted.QuotedApplication</mainClass>
 					<excludes>
 						<exclude>
 							<groupId>org.projectlombok</groupId>
