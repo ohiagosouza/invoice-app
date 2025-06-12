@@ -5,12 +5,13 @@ info:
   version: 1.0.0
 
 servers:
-  - url: http://localhost:8080/api
+  - url: http://localhost:8080/
 
 paths:
-  /auth/login:
+  /auth/user/login:
     post:
       tags: [Auth]
+      operationId: userLogin
       summary: Realiza o login e retorna um token JWT
       requestBody:
         required: true
@@ -26,10 +27,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/AuthResponse'
 
-  /users:
+  /user/register:
     post:
-      tags: [User]
       summary: Cadastra um novo usuário
+      operationId: createUser
       requestBody:
         required: true
         content:
@@ -40,10 +41,11 @@ paths:
         '201':
           description: Usuário criado
 
-  /clients:
+  /client/register:
     post:
       tags: [Client]
       summary: Cadastra um novo cliente
+      operationId: createClient
       security:
         - bearerAuth: []
       requestBody:
@@ -55,10 +57,11 @@ paths:
       responses:
         '201':
           description: Cliente cadastrado
-
+  /client/all:
     get:
       tags: [Client]
       summary: Lista todos os clientes
+      operationId: getAllClients
       security:
         - bearerAuth: []
       responses:
@@ -71,10 +74,11 @@ paths:
                 items:
                   $ref: '#/components/schemas/Client'
 
-  /clients/{id}:
+  /client/{id}:
     get:
       tags: [Client]
       summary: Busca um cliente pelo ID
+      operationId: getClient
       security: [ bearerAuth: [] ]
       parameters:
         - name: id
@@ -93,6 +97,7 @@ paths:
     put:
       tags: [Client]
       summary: Atualiza os dados de um cliente
+      operationId: updateClient
       security: [ bearerAuth: [] ]
       parameters:
         - name: id
@@ -113,6 +118,7 @@ paths:
     delete:
       tags: [Client]
       summary: Remove um cliente
+      operationId: excludeClient
       security: [ bearerAuth: [] ]
       parameters:
         - name: id
@@ -124,10 +130,11 @@ paths:
         '204':
           description: Cliente removido
 
-  /products:
+  /product:
     post:
       tags: [Product]
       summary: Cadastra um novo produto
+      operationId: createProduct
       security:
         - bearerAuth: []
       requestBody:
@@ -139,10 +146,11 @@ paths:
       responses:
         '201':
           description: Produto cadastrado
-
+  /products:
     get:
       tags: [Product]
       summary: Lista todos os produtos
+      operationId: getAllProducts
       security:
         - bearerAuth: []
       responses:
@@ -159,6 +167,7 @@ paths:
     get:
       tags: [Product]
       summary: Busca um produto pelo ID
+      operationId: getProduct
       security: [ bearerAuth: [] ]
       parameters:
         - name: id
@@ -177,6 +186,7 @@ paths:
     put:
       tags: [Product]
       summary: Atualiza os dados de um produto
+      operationId: updateProduct
       security: [ bearerAuth: [] ]
       parameters:
         - name: id
@@ -197,6 +207,7 @@ paths:
     delete:
       tags: [Product]
       summary: Remove um produto
+      operationId: deleteProduct
       security: [ bearerAuth: [] ]
       parameters:
         - name: id
@@ -208,10 +219,11 @@ paths:
         '204':
           description: Produto removido
 
-  /invoices:
+  /invoice:
     post:
       tags: [Invoice]
       summary: Cria um novo orçamento
+      operationId: createInvoice
       security:
         - bearerAuth: []
       requestBody:
@@ -227,10 +239,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/InvoiceResponse'
-
+  /invoices:
     get:
       tags: [Invoice]
       summary: Lista todos os orçamentos
+      operationId: getAllInvoices
       security:
         - bearerAuth: []
       responses:
@@ -247,6 +260,7 @@ paths:
     get:
       tags: [Invoice]
       summary: Busca um orçamento pelo ID
+      operationId: getInvoice
       security: [ bearerAuth: [] ]
       parameters:
         - name: id
@@ -261,10 +275,31 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/InvoiceResponse'
+    put:
+      tags: [ Invoice ]
+      summary: Atualiza os dados de um produto
+      operationId: updateInvoice
+      security: [ bearerAuth: [ ] ]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InvoiceResponse'
+      responses:
+        '200':
+          description: Produto atualizado
 
     delete:
       tags: [Invoice]
       summary: Remove um orçamento
+      operationId: deleteInvoice
       security: [ bearerAuth: [] ]
       parameters:
         - name: id
@@ -302,8 +337,8 @@ components:
       properties:
         street: { type: string }
         number: { type: string }
-        district: { type: string }
         complement: { type: string }
+        neighborhood: { type: string }
         city: { type: string }
         state: { type: string }
         country: { type: string }
@@ -318,6 +353,16 @@ components:
         email: { type: string }
         password: { type: string }
         document: { type: string }
+        planType:
+          type: string
+          enum: [ FREE, ESSENTIAL, PRO, ENTERPRISE  ]
+          default: FREE
+        status:
+          type: string
+          enum: [ ACTIVE, INACTIVE, SUSPENDED ]
+          default: ACTIVE
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
         address:
           $ref: '#/components/schemas/Address'
 
@@ -330,6 +375,8 @@ components:
         email: { type: string }
         document: { type: string }
         ownerId: { type: string }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
         address:
           $ref: '#/components/schemas/Address'
 
@@ -368,7 +415,12 @@ components:
         id: { type: string }
         userId: { type: string }
         clientId: { type: string }
-        date: { type: string, format: date-time }
+        status:
+          type: string
+          enum: [ CREATED, ACCEPTED, REJECTED, OVERDUE, PAID, CANCELLED ]
+          default: CREATED
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
         total: { type: number, format: double }
         discount: { type: number, format: double }
         items:

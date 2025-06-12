@@ -11,8 +11,7 @@ services:
     depends_on:
       - mongodb
     environment:
-      SPRING_DATA_MONGODB_URI: mongodb://localhost:27017/invoices
-
+      SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/quoted-db
   mongodb:
     image: mongo:6
     container_name: mongo
