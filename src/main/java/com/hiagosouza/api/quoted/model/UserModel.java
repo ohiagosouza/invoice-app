@@ -24,7 +24,7 @@ public class UserModel {
     private String password;
     @NotNull
     private String document;
-    @Schema(description = "Plan Type", example = "FREE", allowableValues = {"FREE", "ESSENTIAL", "PRO", "ELITE"})
+    @Schema(description = "Plan Type", example = "FREE", allowableValues = {"FREE", "ESSENTIAL", "PRO", "ENTERPRISE"})
     private PlanType planType;
     @Schema(description = "User status", example = "ACTIVE", allowableValues = {"ACTIVE", "INACTIVE", "SUSPENDED"})
     private UserStatus status;
