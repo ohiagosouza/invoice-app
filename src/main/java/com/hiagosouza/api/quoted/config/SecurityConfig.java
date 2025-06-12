@@ -16,7 +16,6 @@ public class SecurityConfig {
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
-        log.info("Initializing BCryptPasswordEncoder bean");
         return new BCryptPasswordEncoder();
     }
 

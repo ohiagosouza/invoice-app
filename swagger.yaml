@@ -41,7 +41,7 @@ paths:
         '201':
           description: Usuário criado
 
-  /client/register:
+  /clients/register:
     post:
       tags: [Client]
       summary: Cadastra um novo cliente
@@ -57,7 +57,7 @@ paths:
       responses:
         '201':
           description: Cliente cadastrado
-  /client/all:
+  /clients/list-all:
     get:
       tags: [Client]
       summary: Lista todos os clientes
@@ -74,7 +74,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/Client'
 
-  /client/{id}:
+  /clients/{id}:
     get:
       tags: [Client]
       summary: Busca um cliente pelo ID
@@ -130,7 +130,7 @@ paths:
         '204':
           description: Cliente removido
 
-  /product:
+  /products/create:
     post:
       tags: [Product]
       summary: Cadastra um novo produto
@@ -146,7 +146,7 @@ paths:
       responses:
         '201':
           description: Produto cadastrado
-  /products:
+  /products/list-all:
     get:
       tags: [Product]
       summary: Lista todos os produtos
@@ -239,7 +239,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/InvoiceResponse'
-  /invoices:
+  /invoice/list-all:
     get:
       tags: [Invoice]
       summary: Lista todos os orçamentos
@@ -256,7 +256,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/InvoiceResponse'
 
-  /invoices/{id}:
+  /invoice/{id}:
     get:
       tags: [Invoice]
       summary: Busca um orçamento pelo ID
