@@ -4,5 +4,5 @@ public enum PlanType {
     FREE,
     ESSENTIAL,
     PRO,
-    ELITE
+    ENTERPRISE
 }

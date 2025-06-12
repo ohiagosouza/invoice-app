@@ -355,7 +355,7 @@ components:
         document: { type: string }
         planType:
           type: string
-          enum: [ FREE, ESSENTIAL, PRO, ELITE  ]
+          enum: [ FREE, ESSENTIAL, PRO, ENTERPRISE  ]
           default: FREE
         status:
           type: string
