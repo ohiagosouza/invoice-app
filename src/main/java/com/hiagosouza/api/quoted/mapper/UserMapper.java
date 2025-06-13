@@ -1,20 +1,22 @@
 package com.hiagosouza.api.quoted.mapper;
 
 import com.hiagosouza.api.quoted.enums.PlanType;
+import com.hiagosouza.api.quoted.enums.UserRole;
 import com.hiagosouza.api.quoted.enums.UserStatus;
 import com.hiagosouza.api.quoted.model.AddressModel;
-import com.hiagosouza.api.quoted.model.User;
 import com.hiagosouza.api.quoted.model.UserModel;
+import com.hiagosouza.api.quoted.model.UserRequest;
 
 public class UserMapper {
-    public static UserModel toModel(User user) {
+    public static UserModel toModel(UserRequest user) {
         UserModel userModel = new UserModel();
         userModel.setId(user.getId());
-        userModel.setName(user.getName());
+        userModel.setBusinessName(user.getBusinessName());
         userModel.setPhoneNumber(user.getPhoneNumber());
         userModel.setEmail(user.getEmail());
         userModel.setPassword(user.getPassword());
         userModel.setDocument(user.getDocument());
+        userModel.setUserRole(UserRole.valueOf(user.getUserRole().name()));
         userModel.setPlanType(PlanType.valueOf(user.getPlanType().name()));
         userModel.setStatus(UserStatus.valueOf(user.getStatus().name()));
         userModel.setCreatedAt(user.getCreatedAt());
@@ -28,7 +30,7 @@ public class UserMapper {
         return userModel;
     }
 
-    private static AddressModel getAddress(User user) {
+    private static AddressModel getAddress(UserRequest user) {
         AddressModel address = new AddressModel();
         if (user.getAddress() != null) {
             address.setStreet(user.getAddress().getStreet());

@@ -1,6 +1,7 @@
 package com.hiagosouza.api.quoted.model;
 
 import com.hiagosouza.api.quoted.enums.PlanType;
+import com.hiagosouza.api.quoted.enums.UserRole;
 import com.hiagosouza.api.quoted.enums.UserStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
@@ -16,7 +17,7 @@ public class UserModel {
     @Id
     private String id;
     @NotNull
-    private String name;
+    private String businessName;
     private String phoneNumber;
     @NotNull
     private String email;
@@ -24,6 +25,7 @@ public class UserModel {
     private String password;
     @NotNull
     private String document;
+    private UserRole userRole;
     @Schema(description = "Plan Type", example = "FREE", allowableValues = {"FREE", "ESSENTIAL", "PRO", "ENTERPRISE"})
     private PlanType planType;
     @Schema(description = "User status", example = "ACTIVE", allowableValues = {"ACTIVE", "INACTIVE", "SUSPENDED"})

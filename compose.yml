@@ -16,6 +16,7 @@ services:
     image: mongo:6
     container_name: mongo
     restart: always
+    command: mongod --quiet
     ports:
       - "27017:27017"
     volumes:

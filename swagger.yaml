@@ -36,10 +36,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/UserRequest'
       responses:
         '201':
           description: Usuário criado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
 
   /clients/register:
     post:
@@ -344,15 +348,19 @@ components:
         country: { type: string }
         zipCode: { type: string }
 
-    User:
+    UserRequest:
       type: object
       properties:
         id: { type: string }
-        name: { type: string }
+        businessName: { type: string }
         phoneNumber: { type: string }
         email: { type: string }
         password: { type: string }
         document: { type: string }
+        userRole:
+            type: string
+            enum: [ ADMIN, USER, CLIENT, GUEST ]
+            default: USER
         planType:
           type: string
           enum: [ FREE, ESSENTIAL, PRO, ENTERPRISE  ]
@@ -363,6 +371,23 @@ components:
           default: ACTIVE
         createdAt: { type: string, format: date-time }
         updatedAt: { type: string, format: date-time }
+        address:
+          $ref: '#/components/schemas/Address'
+    UserResponse:
+      type: object
+      properties:
+        id: { type: string }
+        businessName: { type: string }
+        phoneNumber: { type: string }
+        email: { type: string }
+        document: { type: string }
+        userRole:
+          type: string
+        planType:
+          type: string
+        status:
+          type: string
+        createdAt: { type: string, format: date-time }
         address:
           $ref: '#/components/schemas/Address'
 
