@@ -7,6 +7,8 @@ import com.hiagosouza.api.quoted.model.AddressModel;
 import com.hiagosouza.api.quoted.model.UserModel;
 import com.hiagosouza.api.quoted.model.UserRequest;
 
+import java.util.List;
+
 public class UserMapper {
     public static UserModel toModel(UserRequest user) {
         UserModel userModel = new UserModel();
@@ -16,7 +18,7 @@ public class UserMapper {
         userModel.setEmail(user.getEmail());
         userModel.setPassword(user.getPassword());
         userModel.setDocument(user.getDocument());
-        userModel.setUserRole(UserRole.valueOf(user.getUserRole().name()));
+        userModel.setUserRoles(List.of(UserRole.USER)); // Default role set to USER
         userModel.setPlanType(PlanType.valueOf(user.getPlanType().name()));
         userModel.setStatus(UserStatus.valueOf(user.getStatus().name()));
         userModel.setCreatedAt(user.getCreatedAt());

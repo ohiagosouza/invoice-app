@@ -1,7 +1,7 @@
 package com.hiagosouza.api.quoted.controller.impl;
 
-import com.hiagosouza.api.quoted.api.UserApi;
 import com.hiagosouza.api.quoted.controller.BaseController;
+import com.hiagosouza.api.quoted.enums.UserRole;
 import com.hiagosouza.api.quoted.mapper.UserMapper;
 import com.hiagosouza.api.quoted.model.UserRequest;
 import com.hiagosouza.api.quoted.model.UserModel;
@@ -15,13 +15,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
-
-import static com.hiagosouza.api.quoted.model.UserRequest.UserRoleEnum.USER;
 
 @RestController
 @Log4j2
-public class UserController extends BaseController implements UserApi {
+public class UserController extends BaseController {
 
     @Autowired
     private final UserService userService;
@@ -30,22 +29,19 @@ public class UserController extends BaseController implements UserApi {
         this.userService = userService;
     }
 
-    @Override
     @PostMapping("/user/register")
     public ResponseEntity<UserResponse> createUser(@Valid @RequestBody UserRequest user) {
-        log.info("---- Creating new user with document: {} ----", user.getDocument());
-        user.setUserRole(USER);
-        user.setCreatedAt(LocalDateTime.now());
-        user.setUpdatedAt(LocalDateTime.now());
         UserModel userModel = UserMapper.toModel(user);
+        userModel.setUserRoles(List.of(UserRole.USER));
+        userModel.setCreatedAt(LocalDateTime.now());
+        userModel.setUpdatedAt(LocalDateTime.now());
 
         try {
             userService.createUser(userModel);
         } catch (IllegalArgumentException e) {
-            log.error("User creation failed: {}", e.getMessage());
+            log.error("***** User creation failed: {} *****", e.getMessage());
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
-        log.info("User created successfully: {}", user.getDocument());
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 

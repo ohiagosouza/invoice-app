@@ -1,11 +1,9 @@
 package com.hiagosouza.api.quoted.mapper;
 
-import com.hiagosouza.api.quoted.enums.PlanType;
-import com.hiagosouza.api.quoted.enums.UserStatus;
 import com.hiagosouza.api.quoted.model.*;
 
 public class ClientMapper {
-    public static ClientModel toModel(Client client) {
+    public static ClientModel toModel(ClientRequest client) {
         ClientModel clientModel = new ClientModel();
         clientModel.setId(client.getId());
         clientModel.setName(client.getName());
@@ -24,7 +22,7 @@ public class ClientMapper {
         return clientModel;
     }
 
-    private static AddressModel getAddress(Client client) {
+    private static AddressModel getAddress(ClientRequest client) {
         AddressModel address = new AddressModel();
         if (client.getAddress() != null) {
             address.setStreet(client.getAddress().getStreet());

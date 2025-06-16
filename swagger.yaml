@@ -57,10 +57,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Client'
+              $ref: '#/components/schemas/ClientRequest'
       responses:
         '201':
-          description: Cliente cadastrado
+          description: Cliente Cadastrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientResponse'
   /clients/list-all:
     get:
       tags: [Client]
@@ -76,7 +80,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Client'
+                  $ref: '#/components/schemas/ClientResponse'
 
   /clients/{id}:
     get:
@@ -96,7 +100,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Client'
+                $ref: '#/components/schemas/ClientResponse'
 
     put:
       tags: [Client]
@@ -114,10 +118,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Client'
+              $ref: '#/components/schemas/ClientRequest'
       responses:
         '200':
-          description: Cliente atualizado
+          description: Cliente Atualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientResponse'
 
     delete:
       tags: [Client]
@@ -132,7 +140,7 @@ paths:
             type: string
       responses:
         '204':
-          description: Cliente removido
+          description: Cliente deletado
 
   /products/create:
     post:
@@ -357,10 +365,6 @@ components:
         email: { type: string }
         password: { type: string }
         document: { type: string }
-        userRole:
-            type: string
-            enum: [ ADMIN, USER, CLIENT, GUEST ]
-            default: USER
         planType:
           type: string
           enum: [ FREE, ESSENTIAL, PRO, ENTERPRISE  ]
@@ -391,7 +395,21 @@ components:
         address:
           $ref: '#/components/schemas/Address'
 
-    Client:
+    ClientRequest:
+      type: object
+      properties:
+        id: { type: string }
+        name: { type: string }
+        phoneNumber: { type: string }
+        email: { type: string }
+        document: { type: string }
+        ownerId: { type: string }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+        address:
+          $ref: '#/components/schemas/Address'
+
+    ClientResponse:
       type: object
       properties:
         id: { type: string }

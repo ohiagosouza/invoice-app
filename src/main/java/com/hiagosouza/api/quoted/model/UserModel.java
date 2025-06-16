@@ -9,6 +9,7 @@ import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Document(collection = "users")
 @Getter
@@ -25,7 +26,7 @@ public class UserModel {
     private String password;
     @NotNull
     private String document;
-    private UserRole userRole;
+    private List<UserRole> userRoles;
     @Schema(description = "Plan Type", example = "FREE", allowableValues = {"FREE", "ESSENTIAL", "PRO", "ENTERPRISE"})
     private PlanType planType;
     @Schema(description = "User status", example = "ACTIVE", allowableValues = {"ACTIVE", "INACTIVE", "SUSPENDED"})

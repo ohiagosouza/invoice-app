@@ -39,7 +39,7 @@ public class JwtUtils {
                 .compact();
     }
 
-    public boolean validateToken(String token, UserDetails userDetails) {
+    public boolean isTokenValid(String token, UserDetails userDetails) {
         return extractUsername(token).equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
 
@@ -50,14 +50,6 @@ public class JwtUtils {
                 .parseSignedClaims(token)
                 .getPayload()
                 .getSubject();
-    }
-
-    public boolean isTokenValid(String token, String username) {
-        try {
-            return extractUsername(token).equals(username) && !isTokenExpired(token);
-        } catch (Exception e) {
-            return false;
-        }
     }
 
     public boolean isTokenExpired(String token) {
