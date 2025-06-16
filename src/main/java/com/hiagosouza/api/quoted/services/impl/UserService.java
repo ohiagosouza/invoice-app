@@ -1,4 +1,4 @@
-package com.hiagosouza.api.quoted.services;
+package com.hiagosouza.api.quoted.services.impl;
 
 import com.hiagosouza.api.quoted.model.UserModel;
 import com.hiagosouza.api.quoted.repository.UserRepository;
@@ -21,7 +21,7 @@ public class UserService {
     
     public void createUser(UserModel user) {
 
-        if (user != null
+        if (user.getDocument() != null
                 && findByDocument(user.getDocument()).isEmpty()
                 && findByEmail(user.getEmail()).isEmpty()) {
             String encryptedPassword = bCryptPassword.encode(user.getPassword());

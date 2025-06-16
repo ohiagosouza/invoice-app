@@ -9,9 +9,10 @@
 	</parent>
 	<groupId>com.hiagosouza.api</groupId>
 	<artifactId>quoted</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<name>quoted</name>
 	<description>Create Invoices</description>
+	<packaging>jar</packaging>
 	<url/>
 	<licenses>
 		<license/>

@@ -36,12 +36,16 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/UserRequest'
       responses:
         '201':
           description: Usuário criado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
 
-  /client/register:
+  /clients/register:
     post:
       tags: [Client]
       summary: Cadastra um novo cliente
@@ -53,11 +57,15 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Client'
+              $ref: '#/components/schemas/ClientRequest'
       responses:
         '201':
-          description: Cliente cadastrado
-  /client/all:
+          description: Cliente Cadastrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientResponse'
+  /clients/list-all:
     get:
       tags: [Client]
       summary: Lista todos os clientes
@@ -72,9 +80,9 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Client'
+                  $ref: '#/components/schemas/ClientResponse'
 
-  /client/{id}:
+  /clients/{id}:
     get:
       tags: [Client]
       summary: Busca um cliente pelo ID
@@ -92,7 +100,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Client'
+                $ref: '#/components/schemas/ClientResponse'
 
     put:
       tags: [Client]
@@ -110,10 +118,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Client'
+              $ref: '#/components/schemas/ClientRequest'
       responses:
         '200':
-          description: Cliente atualizado
+          description: Cliente Atualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientResponse'
 
     delete:
       tags: [Client]
@@ -128,9 +140,9 @@ paths:
             type: string
       responses:
         '204':
-          description: Cliente removido
+          description: Cliente deletado
 
-  /product:
+  /products/create:
     post:
       tags: [Product]
       summary: Cadastra um novo produto
@@ -146,7 +158,7 @@ paths:
       responses:
         '201':
           description: Produto cadastrado
-  /products:
+  /products/list-all:
     get:
       tags: [Product]
       summary: Lista todos os produtos
@@ -239,7 +251,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/InvoiceResponse'
-  /invoices:
+  /invoice/list-all:
     get:
       tags: [Invoice]
       summary: Lista todos os orçamentos
@@ -256,7 +268,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/InvoiceResponse'
 
-  /invoices/{id}:
+  /invoice/{id}:
     get:
       tags: [Invoice]
       summary: Busca um orçamento pelo ID
@@ -344,11 +356,11 @@ components:
         country: { type: string }
         zipCode: { type: string }
 
-    User:
+    UserRequest:
       type: object
       properties:
         id: { type: string }
-        name: { type: string }
+        businessName: { type: string }
         phoneNumber: { type: string }
         email: { type: string }
         password: { type: string }
@@ -365,8 +377,39 @@ components:
         updatedAt: { type: string, format: date-time }
         address:
           $ref: '#/components/schemas/Address'
+    UserResponse:
+      type: object
+      properties:
+        id: { type: string }
+        businessName: { type: string }
+        phoneNumber: { type: string }
+        email: { type: string }
+        document: { type: string }
+        userRole:
+          type: string
+        planType:
+          type: string
+        status:
+          type: string
+        createdAt: { type: string, format: date-time }
+        address:
+          $ref: '#/components/schemas/Address'
 
-    Client:
+    ClientRequest:
+      type: object
+      properties:
+        id: { type: string }
+        name: { type: string }
+        phoneNumber: { type: string }
+        email: { type: string }
+        document: { type: string }
+        ownerId: { type: string }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+        address:
+          $ref: '#/components/schemas/Address'
+
+    ClientResponse:
       type: object
       properties:
         id: { type: string }
