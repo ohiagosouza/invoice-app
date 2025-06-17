@@ -18,16 +18,16 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @RestController
 public class ProductsController extends BaseController {
 
     @Autowired
-    private  ProductService productService;
+    private ProductService productService;
     @Autowired
-    private  UserService userService;
-
+    private UserService userService;
 
 
     @PostMapping("/products/create")
@@ -61,9 +61,10 @@ public class ProductsController extends BaseController {
 
         if (email != null) {
             UserModel user = userService.findByEmail(email);
+            List<ProductModel> products = productService.findByNameStartingWithIgnoreCase(prefix).stream()
+                    .filter(owner -> Objects.equals(owner.getOwnerId(), user.getId())).toList();
 
-            List<ProductModel> products = productService.findByNameStartingWithIgnoreCase(prefix);
-            return ResponseEntity.ok(products);
+            return ResponseEntity.status(HttpStatus.OK).body(products);
         } else {
             log.error("Product search failed for prefix: {}", prefix);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found");
