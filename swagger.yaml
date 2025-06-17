@@ -10,7 +10,7 @@ servers:
 paths:
   /auth/user/login:
     post:
-      tags: [Auth]
+      tags: [ Auth ]
       operationId: userLogin
       summary: Realiza o login e retorna um token JWT
       requestBody:
@@ -47,11 +47,11 @@ paths:
 
   /clients/register:
     post:
-      tags: [Client]
+      tags: [ Client ]
       summary: Cadastra um novo cliente
       operationId: createClient
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       requestBody:
         required: true
         content:
@@ -67,11 +67,11 @@ paths:
                 $ref: '#/components/schemas/ClientResponse'
   /clients/list-all:
     get:
-      tags: [Client]
+      tags: [ Client ]
       summary: Lista todos os clientes
       operationId: getAllClients
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       responses:
         '200':
           description: Lista de clientes
@@ -84,10 +84,10 @@ paths:
 
   /clients/{id}:
     get:
-      tags: [Client]
+      tags: [ Client ]
       summary: Busca um cliente pelo ID
       operationId: getClient
-      security: [ bearerAuth: [] ]
+      security: [ bearerAuth: [ ] ]
       parameters:
         - name: id
           in: path
@@ -103,10 +103,10 @@ paths:
                 $ref: '#/components/schemas/ClientResponse'
 
     put:
-      tags: [Client]
+      tags: [ Client ]
       summary: Atualiza os dados de um cliente
       operationId: updateClient
-      security: [ bearerAuth: [] ]
+      security: [ bearerAuth: [ ] ]
       parameters:
         - name: id
           in: path
@@ -128,10 +128,10 @@ paths:
                 $ref: '#/components/schemas/ClientResponse'
 
     delete:
-      tags: [Client]
+      tags: [ Client ]
       summary: Remove um cliente
       operationId: excludeClient
-      security: [ bearerAuth: [] ]
+      security: [ bearerAuth: [ ] ]
       parameters:
         - name: id
           in: path
@@ -144,11 +144,11 @@ paths:
 
   /products/create:
     post:
-      tags: [Product]
+      tags: [ Product ]
       summary: Cadastra um novo produto
       operationId: createProduct
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       requestBody:
         required: true
         content:
@@ -160,11 +160,11 @@ paths:
           description: Produto cadastrado
   /products/list-all:
     get:
-      tags: [Product]
+      tags: [ Product ]
       summary: Lista todos os produtos
       operationId: getAllProducts
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       responses:
         '200':
           description: Lista de produtos
@@ -177,10 +177,10 @@ paths:
 
   /products/{id}:
     get:
-      tags: [Product]
+      tags: [ Product ]
       summary: Busca um produto pelo ID
       operationId: getProduct
-      security: [ bearerAuth: [] ]
+      security: [ bearerAuth: [ ] ]
       parameters:
         - name: id
           in: path
@@ -196,10 +196,10 @@ paths:
                 $ref: '#/components/schemas/Product'
 
     put:
-      tags: [Product]
+      tags: [ Product ]
       summary: Atualiza os dados de um produto
       operationId: updateProduct
-      security: [ bearerAuth: [] ]
+      security: [ bearerAuth: [ ] ]
       parameters:
         - name: id
           in: path
@@ -217,10 +217,10 @@ paths:
           description: Produto atualizado
 
     delete:
-      tags: [Product]
+      tags: [ Product ]
       summary: Remove um produto
       operationId: deleteProduct
-      security: [ bearerAuth: [] ]
+      security: [ bearerAuth: [ ] ]
       parameters:
         - name: id
           in: path
@@ -233,11 +233,11 @@ paths:
 
   /invoice:
     post:
-      tags: [Invoice]
+      tags: [ Invoice ]
       summary: Cria um novo orçamento
       operationId: createInvoice
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       requestBody:
         required: true
         content:
@@ -253,11 +253,11 @@ paths:
                 $ref: '#/components/schemas/InvoiceResponse'
   /invoice/list-all:
     get:
-      tags: [Invoice]
+      tags: [ Invoice ]
       summary: Lista todos os orçamentos
       operationId: getAllInvoices
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       responses:
         '200':
           description: Lista de orçamentos
@@ -270,10 +270,10 @@ paths:
 
   /invoice/{id}:
     get:
-      tags: [Invoice]
+      tags: [ Invoice ]
       summary: Busca um orçamento pelo ID
       operationId: getInvoice
-      security: [ bearerAuth: [] ]
+      security: [ bearerAuth: [ ] ]
       parameters:
         - name: id
           in: path
@@ -309,10 +309,10 @@ paths:
           description: Produto atualizado
 
     delete:
-      tags: [Invoice]
+      tags: [ Invoice ]
       summary: Remove um orçamento
       operationId: deleteInvoice
-      security: [ bearerAuth: [] ]
+      security: [ bearerAuth: [ ] ]
       parameters:
         - name: id
           in: path
@@ -337,7 +337,7 @@ components:
       properties:
         email: { type: string }
         password: { type: string }
-      required: [email, password]
+      required: [ email, password ]
 
     AuthResponse:
       type: object
@@ -367,7 +367,7 @@ components:
         document: { type: string }
         planType:
           type: string
-          enum: [ FREE, ESSENTIAL, PRO, ENTERPRISE  ]
+          enum: [ FREE, ESSENTIAL, PRO, ENTERPRISE ]
           default: FREE
         status:
           type: string
