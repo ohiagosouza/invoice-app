@@ -1,49 +1,49 @@
 package com.hiagosouza.api.quoted.controller.impl;
 
-import com.hiagosouza.api.quoted.api.AuthApi;
 import com.hiagosouza.api.quoted.controller.BaseController;
 import com.hiagosouza.api.quoted.model.AuthRequest;
 import com.hiagosouza.api.quoted.model.AuthResponse;
-import com.hiagosouza.api.quoted.model.UserModel;
 
 import com.hiagosouza.api.quoted.security.JwtUtils;
-import com.hiagosouza.api.quoted.services.UserService;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Optional;
-
 @RestController
-public class LoginController extends BaseController implements AuthApi {
+@Slf4j
+public class LoginController extends BaseController {
 
-    private final UserService userService;
-    private final BCryptPasswordEncoder passwordEncoder;
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
     private final JwtUtils jwtUtils;
 
-    public LoginController(UserService userService, JwtUtils jwtUtils, BCryptPasswordEncoder passwordEncoder) {
-        this.userService = userService;
+    public LoginController(JwtUtils jwtUtils, AuthenticationManager authenticationManager) {
         this.jwtUtils = jwtUtils;
-        this.passwordEncoder = passwordEncoder;
+        this.authenticationManager = authenticationManager;
     }
 
-    @Override
     @PostMapping("/auth/user/login")
-    public ResponseEntity<AuthResponse> userLogin(@Valid @RequestBody AuthRequest authRequest) {
-        System.out.println("---- Login Request Started ----");
-        Optional<UserModel> user = userService.findByEmail(authRequest.getEmail());
+    public ResponseEntity<?> userLogin(@Valid @RequestBody AuthRequest authRequest) {
+        try {
+            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword()));
 
-        if (user.isEmpty() || !passwordEncoder.matches(authRequest.getPassword(), user.get().getPassword())) {
-            System.out.println("---- Login Request Failed ----");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new AuthResponse());
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            String token = jwtUtils.generateToken(userDetails.getUsername());
+
+            return ResponseEntity.ok().body(new AuthResponse().token(token));
+        } catch (Exception e) {
+            log.error("***** Authentication failed for email: {} - {} *****", authRequest.getEmail(), e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
-        AuthResponse authResponse = new AuthResponse();
-        String token = jwtUtils.generateToken(user.get().getEmail());
-        return ResponseEntity.ok().body(authResponse.token(token));
-
     }
 }

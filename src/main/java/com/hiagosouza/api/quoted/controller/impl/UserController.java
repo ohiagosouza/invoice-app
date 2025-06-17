@@ -1,23 +1,30 @@
 package com.hiagosouza.api.quoted.controller.impl;
 
-import com.hiagosouza.api.quoted.api.UserApi;
 import com.hiagosouza.api.quoted.controller.BaseController;
+import com.hiagosouza.api.quoted.enums.UserRole;
 import com.hiagosouza.api.quoted.mapper.UserMapper;
-import com.hiagosouza.api.quoted.model.User;
+import com.hiagosouza.api.quoted.model.UserRequest;
 import com.hiagosouza.api.quoted.model.UserModel;
-import com.hiagosouza.api.quoted.services.UserService;
+import com.hiagosouza.api.quoted.model.UserResponse;
+import com.hiagosouza.api.quoted.services.impl.UserService;
 import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.webjars.NotFoundException;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
+import java.util.List;
 
 @RestController
 @Log4j2
-public class UserController extends BaseController implements UserApi {
+public class UserController extends BaseController {
+
+    @Autowired
     private final UserService userService;
 
     public UserController(UserService userService) {
@@ -25,31 +32,34 @@ public class UserController extends BaseController implements UserApi {
     }
 
     @PostMapping("/user/register")
-    public ResponseEntity<User> createNewUser(@Valid @RequestBody User user) {
-        log.info("----- START CREATING USER -----");
-        user.setCreatedAt(LocalDateTime.now());
-        user.setUpdatedAt(LocalDateTime.now());
+    public ResponseEntity<UserResponse> createUser(@Valid @RequestBody UserRequest user) {
         UserModel userModel = UserMapper.toModel(user);
+        userModel.setUserRoles(List.of(UserRole.USER));
+        userModel.setCreatedAt(LocalDateTime.now());
+        userModel.setUpdatedAt(LocalDateTime.now());
+
 
         try {
             userService.createUser(userModel);
-           log.info("----- FINISHED CREATING USER -----");
-        } catch (Exception e) {
-            log.info("----- CONFLICT CREATING USER-----");
+        } catch (IllegalArgumentException e) {
+            log.error("***** User creation failed: {} *****", e.getMessage());
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
         return ResponseEntity.status(HttpStatus.CREATED).build();
-
     }
 
-    @GetMapping("/user/{document}")
-    public ResponseEntity<UserModel> searchUserByDocument(@PathVariable String document) {
-        System.out.println("---- Start Searching User -----");
-        Optional<UserModel> user = userService.findByDocument(document);
-        System.out.println("---- End Searching User -----");
-        return user.map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    @GetMapping("/user/me")
+    public ResponseEntity<?> showMe() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
 
+        log.info("REQUESTER EMAIL: {}", email);
+
+        try {
+            UserModel user = userService.findByEmail(email);
+            return ResponseEntity.status(HttpStatus.OK).body(user);
+        } catch (NotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
-
 }
