@@ -6,6 +6,7 @@ import com.hiagosouza.api.quoted.model.CustomerModel;
 import com.hiagosouza.api.quoted.model.CustomerRequest;
 import com.hiagosouza.api.quoted.model.CustomerResponse;
 import com.hiagosouza.api.quoted.model.UserModel;
+import com.hiagosouza.api.quoted.security.AuthUtils;
 import com.hiagosouza.api.quoted.services.impl.CustomerService;
 import com.hiagosouza.api.quoted.services.impl.UserService;
 import jakarta.validation.Valid;
@@ -37,8 +38,6 @@ public class CustomerController extends BaseController {
         CustomerModel customerModel = CustomerMapper.toModel(customer);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-        customerModel.setCreatedAt(LocalDateTime.now());
-        customerModel.setUpdatedAt(LocalDateTime.now());
 
         if (email != null) {
             UserModel user = userService.findByEmail(email);
@@ -55,8 +54,7 @@ public class CustomerController extends BaseController {
 
     @GetMapping("/customers/list-all")
     public ResponseEntity<?> getAllCustomers() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
+        String email = AuthUtils.getAuthenticatedUserEmail();
 
         if(email != null) {
             UserModel owner = userService.findByEmail(email);

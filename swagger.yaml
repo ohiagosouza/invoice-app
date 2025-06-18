@@ -231,7 +231,7 @@ paths:
         '204':
           description: Produto removido
 
-  /invoice:
+  /invoices/create:
     post:
       tags: [ Invoice ]
       summary: Cria um novo orçamento
@@ -251,7 +251,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/InvoiceResponse'
-  /invoice/list-all:
+  /invoices/list-all:
     get:
       tags: [ Invoice ]
       summary: Lista todos os orçamentos
@@ -268,7 +268,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/InvoiceResponse'
 
-  /invoice/{id}:
+  /invoices/{id}:
     get:
       tags: [ Invoice ]
       summary: Busca um orçamento pelo ID
@@ -442,14 +442,15 @@ components:
         productName: { type: string }
         quantity: { type: integer }
         unitPrice: { type: number, format: double }
-        subtotal: { type: number, format: double }
 
     InvoiceRequest:
       type: object
       properties:
         id: { type: string }
+        ownerId: { type: string }
+        customerDocument: { type: string }
         customer:
-          $ref: '#/components/schemas/CustomerResponse'
+          $ref: '#/components/schemas/CustomerRequest'
         status:
           type: string
           enum: [ CREATED, ACCEPTED, REJECTED, OVERDUE, PAID, CANCELLED ]
@@ -469,17 +470,18 @@ components:
       type: object
       properties:
         id: { type: string }
+        ownerId: { type: string }
         customer:
           $ref: '#/components/schemas/CustomerResponse'
         status:
           type: string
-        createdAt: { type: string, format: date-time }
-        updatedAt: { type: string, format: date-time }
-        tax: { type: number, format: double }
-        subtotal: { type: number, format: double }
-        discount: { type: number, format: double }
-        total: { type: number, format: double }
         items:
           type: array
           items:
             $ref: '#/components/schemas/ProductItem'
+        tax: { type: number, format: double }
+        subtotal: { type: number, format: double }
+        discount: { type: number, format: double }
+        total: { type: number, format: double }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
