@@ -1,22 +1,17 @@
 package com.hiagosouza.api.quoted.model;
 
-import com.hiagosouza.api.quoted.enums.PlanType;
-import com.hiagosouza.api.quoted.enums.UserStatus;
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.lang.Nullable;
 
 import java.time.LocalDateTime;
 
-@Document(collection = "clients")
+@Document(collection = "customers")
 @Getter
 @Setter
-public class ClientModel {
+public class CustomerModel {
     @Id
     private String id;
     @NotNull

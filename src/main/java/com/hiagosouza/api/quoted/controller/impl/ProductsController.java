@@ -5,6 +5,7 @@ import com.hiagosouza.api.quoted.mapper.ProductMapper;
 import com.hiagosouza.api.quoted.model.Product;
 import com.hiagosouza.api.quoted.model.ProductModel;
 import com.hiagosouza.api.quoted.model.UserModel;
+import com.hiagosouza.api.quoted.security.AuthUtils;
 import com.hiagosouza.api.quoted.services.impl.ProductService;
 import com.hiagosouza.api.quoted.services.impl.UserService;
 import jakarta.validation.Valid;
@@ -37,8 +38,7 @@ public class ProductsController extends BaseController {
         productModel.setCreatedAt(LocalDateTime.now());
         productModel.setUpdatedAt(LocalDateTime.now());
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
+        String email = AuthUtils.getAuthenticatedUserEmail();
 
         if (email != null) {
             UserModel user = userService.findByEmail(email);
