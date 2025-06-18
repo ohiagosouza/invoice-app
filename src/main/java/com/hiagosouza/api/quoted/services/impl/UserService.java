@@ -1,5 +1,6 @@
 package com.hiagosouza.api.quoted.services.impl;
 
+import com.hiagosouza.api.quoted.enums.UserRole;
 import com.hiagosouza.api.quoted.model.UserModel;
 import com.hiagosouza.api.quoted.repository.UserRepository;
 import com.hiagosouza.api.quoted.utils.DocumentUtils;
@@ -8,6 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -33,6 +37,9 @@ public class UserService {
             user.setDocument(cleanedDocument);
             String cleanedPhone = PhoneUtils.cleanPhoneNumber(user.getPhoneNumber());
             user.setPhoneNumber(cleanedPhone);
+            user.setUserRoles(List.of(UserRole.USER));
+            user.setCreatedAt(LocalDateTime.now());
+            user.setUpdatedAt(LocalDateTime.now());
             userRepository.save(user);
         } else {
             log.error("***** User not created, either null or already exists: {} *****", user.getDocument());

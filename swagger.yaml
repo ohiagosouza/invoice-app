@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: Quoted Application
-  description: API para cadastro de usuários, clientes, produtos e geração de orçamentos com autenticação JWT.
+  description: API para cadastro de usuários, customeres, produtos e geração de orçamentos com autenticação JWT.
   version: 1.0.0
 
 servers:
@@ -45,11 +45,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/UserResponse'
 
-  /clients/register:
+  /customers/register:
     post:
-      tags: [ Client ]
-      summary: Cadastra um novo cliente
-      operationId: createClient
+      tags: [ Customer ]
+      summary: Cadastra um novo customer
+      operationId: createCustomer
       security:
         - bearerAuth: [ ]
       requestBody:
@@ -57,36 +57,36 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ClientRequest'
+              $ref: '#/components/schemas/CustomerRequest'
       responses:
         '201':
-          description: Cliente Cadastrado
+          description: Customer Cadastrado
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ClientResponse'
-  /clients/list-all:
+                $ref: '#/components/schemas/CustomerResponse'
+  /customers/list-all:
     get:
-      tags: [ Client ]
-      summary: Lista todos os clientes
-      operationId: getAllClients
+      tags: [ Customer ]
+      summary: Lista todos os customers
+      operationId: getAllCustomers
       security:
         - bearerAuth: [ ]
       responses:
         '200':
-          description: Lista de clientes
+          description: Lista de customeres
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ClientResponse'
+                  $ref: '#/components/schemas/CustomerResponse'
 
-  /clients/{id}:
+  /customers/{id}:
     get:
-      tags: [ Client ]
-      summary: Busca um cliente pelo ID
-      operationId: getClient
+      tags: [ Customer ]
+      summary: Busca um customer pelo ID
+      operationId: getCustomer
       security: [ bearerAuth: [ ] ]
       parameters:
         - name: id
@@ -96,16 +96,16 @@ paths:
             type: string
       responses:
         '200':
-          description: Cliente encontrado
+          description: customere encontrado
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ClientResponse'
+                $ref: '#/components/schemas/CustomerResponse'
 
     put:
-      tags: [ Client ]
-      summary: Atualiza os dados de um cliente
-      operationId: updateClient
+      tags: [ Customer ]
+      summary: Atualiza os dados de um customere
+      operationId: updateCustomer
       security: [ bearerAuth: [ ] ]
       parameters:
         - name: id
@@ -118,19 +118,19 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ClientRequest'
+              $ref: '#/components/schemas/CustomerRequest'
       responses:
         '200':
-          description: Cliente Atualizado
+          description: Customer Atualizado
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ClientResponse'
+                $ref: '#/components/schemas/CustomerResponse'
 
     delete:
-      tags: [ Client ]
-      summary: Remove um cliente
-      operationId: excludeClient
+      tags: [ Customer ]
+      summary: Remove um customer
+      operationId: excludeCustomer
       security: [ bearerAuth: [ ] ]
       parameters:
         - name: id
@@ -140,7 +140,7 @@ paths:
             type: string
       responses:
         '204':
-          description: Cliente deletado
+          description: customer deletado
 
   /products/create:
     post:
@@ -231,7 +231,7 @@ paths:
         '204':
           description: Produto removido
 
-  /invoice:
+  /invoices/create:
     post:
       tags: [ Invoice ]
       summary: Cria um novo orçamento
@@ -251,7 +251,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/InvoiceResponse'
-  /invoice/list-all:
+  /invoices/list-all:
     get:
       tags: [ Invoice ]
       summary: Lista todos os orçamentos
@@ -268,7 +268,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/InvoiceResponse'
 
-  /invoice/{id}:
+  /invoices/{id}:
     get:
       tags: [ Invoice ]
       summary: Busca um orçamento pelo ID
@@ -395,7 +395,7 @@ components:
         address:
           $ref: '#/components/schemas/Address'
 
-    ClientRequest:
+    CustomerRequest:
       type: object
       properties:
         id: { type: string }
@@ -409,7 +409,7 @@ components:
         address:
           $ref: '#/components/schemas/Address'
 
-    ClientResponse:
+    CustomerResponse:
       type: object
       properties:
         id: { type: string }
@@ -442,33 +442,46 @@ components:
         productName: { type: string }
         quantity: { type: integer }
         unitPrice: { type: number, format: double }
-        subtotal: { type: number, format: double }
 
     InvoiceRequest:
       type: object
       properties:
-        clientId: { type: string }
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/ProductItem'
-        discount: { type: number, format: double }
-
-    InvoiceResponse:
-      type: object
-      properties:
         id: { type: string }
-        userId: { type: string }
-        clientId: { type: string }
+        ownerId: { type: string }
+        customerDocument: { type: string }
+        customer:
+          $ref: '#/components/schemas/CustomerRequest'
         status:
           type: string
           enum: [ CREATED, ACCEPTED, REJECTED, OVERDUE, PAID, CANCELLED ]
           default: CREATED
         createdAt: { type: string, format: date-time }
         updatedAt: { type: string, format: date-time }
-        total: { type: number, format: double }
+        tax: { type: number, format: double }
+        subtotal: { type: number, format: double }
         discount: { type: number, format: double }
+        total: { type: number, format: double }
         items:
           type: array
           items:
             $ref: '#/components/schemas/ProductItem'
+
+    InvoiceResponse:
+      type: object
+      properties:
+        id: { type: string }
+        ownerId: { type: string }
+        customer:
+          $ref: '#/components/schemas/CustomerResponse'
+        status:
+          type: string
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductItem'
+        tax: { type: number, format: double }
+        subtotal: { type: number, format: double }
+        discount: { type: number, format: double }
+        total: { type: number, format: double }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }

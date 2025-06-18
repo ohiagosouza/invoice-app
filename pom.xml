@@ -32,6 +32,10 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-mongodb</artifactId>
 		</dependency>
 		<dependency>
@@ -135,12 +139,14 @@
 				<executions>
 					<execution>
 						<id>quoted</id>
+						<phase>generate-sources</phase>
 						<goals>
 							<goal>generate</goal>
 						</goals>
 						<configuration>
 							<inputSpec>${project.basedir}/swagger.yaml</inputSpec>
 							<generatorName>spring</generatorName>
+							<output>${project.build.directory}/generated-sources/openapi</output>
 							<apiPackage>com.hiagosouza.api.quoted.api</apiPackage>
 							<modelPackage>com.hiagosouza.api.quoted.model</modelPackage>
 							<configOptions>

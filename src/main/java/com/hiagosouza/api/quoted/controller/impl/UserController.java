@@ -6,6 +6,7 @@ import com.hiagosouza.api.quoted.mapper.UserMapper;
 import com.hiagosouza.api.quoted.model.UserRequest;
 import com.hiagosouza.api.quoted.model.UserModel;
 import com.hiagosouza.api.quoted.model.UserResponse;
+import com.hiagosouza.api.quoted.security.AuthUtils;
 import com.hiagosouza.api.quoted.services.impl.UserService;
 import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
@@ -34,10 +35,6 @@ public class UserController extends BaseController {
     @PostMapping("/user/register")
     public ResponseEntity<UserResponse> createUser(@Valid @RequestBody UserRequest user) {
         UserModel userModel = UserMapper.toModel(user);
-        userModel.setUserRoles(List.of(UserRole.USER));
-        userModel.setCreatedAt(LocalDateTime.now());
-        userModel.setUpdatedAt(LocalDateTime.now());
-
 
         try {
             userService.createUser(userModel);
@@ -50,10 +47,7 @@ public class UserController extends BaseController {
 
     @GetMapping("/user/me")
     public ResponseEntity<?> showMe() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-
-        log.info("REQUESTER EMAIL: {}", email);
+        String email = AuthUtils.getAuthenticatedUserEmail();
 
         try {
             UserModel user = userService.findByEmail(email);

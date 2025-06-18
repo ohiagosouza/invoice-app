@@ -6,6 +6,6 @@ COPY . .
 # Imagem final apenas com o .jar
 FROM eclipse-temurin:21-jdk-alpine
 WORKDIR /app
-COPY --from=build /app/target/quoted-0.0.1.jar quoted-0.0.1.jar
+COPY --from=build /app/target/quoted-*.jar app.jar
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "quoted-0.0.1.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
