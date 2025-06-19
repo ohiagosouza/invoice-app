@@ -52,16 +52,21 @@ public class UserController extends BaseController {
         }
     }
 
-    @PutMapping("/user/update")
+    @PatchMapping("/user/update")
     public ResponseEntity<UserResponse> updateUser(@Valid @RequestBody UserRequest user) {
-        UserModel userModel = UserMapper.toModel(user);
+        String email = AuthUtils.getAuthenticatedUserEmail();
 
-        try {
-            userService.updateUser(userModel);
-        } catch (IllegalArgumentException e) {
-            log.error("***** User update failed: {} *****", e.getMessage());
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        if(email != null) {
+            UserModel existingUser = userService.findByEmail(email);
+            if (existingUser != null) {
+                UserModel userToUpdate = UserMapper.toModel(user);
+                userToUpdate.setId(existingUser.getId());
+                userService.updateUserInformation(userToUpdate);
+            }
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } else {
+            log.error("***** User not authenticated *****");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

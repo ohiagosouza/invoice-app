@@ -44,22 +44,33 @@ public class UserService {
         }
     }
 
-    public void updateUser(UserModel user) {
-        UserModel userToUpdate = findByDocument(user.getDocument());
+    public void updateUserInformation(UserModel user) {
+        UserModel userToUpdate = findById(user.getId());
 
         if (userToUpdate == null) {
             log.error("***** User not found for update: {} *****", user.getDocument());
             throw new IllegalArgumentException("User not found");
         }
 
-        userToUpdate.setPassword(bCryptPassword.encode(user.getPassword()));
-        userToUpdate.setDocument(DocumentUtils.cleanDocument(user.getDocument()));
-        userToUpdate.setPhoneNumber(PhoneUtils.cleanPhoneNumber(user.getPhoneNumber()));
-        userToUpdate.setEmail(user.getEmail());
-        userToUpdate.setAddress(user.getAddress());
+        if (user.getPassword() != null && !user.getPassword().isBlank()) {
+            userToUpdate.setPassword(bCryptPassword.encode(user.getPassword()));
+        }
+
+        if (user.getPhoneNumber() != null && !user.getPhoneNumber().isBlank()) {
+            userToUpdate.setPhoneNumber(PhoneUtils.cleanPhoneNumber(user.getPhoneNumber()));
+        }
+
+        if (user.getEmail() != null && !user.getEmail().isBlank()) {
+            userToUpdate.setEmail(user.getEmail());
+        }
+
+        if (user.getAddress() != null) {
+            userToUpdate.setAddress(user.getAddress());
+        }
+
         userToUpdate.setUpdatedAt(LocalDateTime.now());
 
-        log.info("***** Updated user with document: {} *****", user.getDocument());
+        log.info("***** Updated user with id: {} *****", user.getId());
         userRepository.save(userToUpdate);
     }
 
@@ -78,6 +89,15 @@ public class UserService {
             return userRepository.findByEmail(email);
         } catch (RuntimeException e) {
             throw new RuntimeException("Email not found: " + email);
+        }
+    }
+
+    public UserModel findById(String userId) {
+        log.info("***** Searching for user by Id: {} *****", userId);
+        try {
+            return userRepository.findById(userId);
+        } catch (RuntimeException e) {
+            throw new RuntimeException("Id not found: " + userId);
         }
     }
 }

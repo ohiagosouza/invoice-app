@@ -3,13 +3,11 @@ package com.hiagosouza.api.quoted.controller.impl;
 import com.hiagosouza.api.quoted.controller.BaseController;
 import com.hiagosouza.api.quoted.mapper.CustomerMapper;
 import com.hiagosouza.api.quoted.mapper.InvoiceMapper;
-import com.hiagosouza.api.quoted.model.CustomerModel;
-import com.hiagosouza.api.quoted.model.InvoiceModel;
-import com.hiagosouza.api.quoted.model.InvoiceRequest;
-import com.hiagosouza.api.quoted.model.UserModel;
+import com.hiagosouza.api.quoted.model.*;
 import com.hiagosouza.api.quoted.security.AuthUtils;
 import com.hiagosouza.api.quoted.services.impl.CustomerService;
 import com.hiagosouza.api.quoted.services.impl.InvoiceService;
+import com.hiagosouza.api.quoted.services.impl.ProductService;
 import com.hiagosouza.api.quoted.services.impl.UserService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +22,9 @@ import org.springframework.web.bind.annotation.*;
 import org.webjars.NotFoundException;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -32,11 +33,13 @@ public class InvoiceController extends BaseController {
     private final UserService userService;
     private final InvoiceService invoiceService;
     private final CustomerService customerService;
+    private final ProductService productService;
 
-    public InvoiceController(UserService userService, InvoiceService invoiceService, CustomerService customerService) {
+    public InvoiceController(UserService userService, InvoiceService invoiceService, CustomerService customerService, ProductService productService) {
         this.userService = userService;
         this.invoiceService = invoiceService;
         this.customerService = customerService;
+        this.productService = productService;
     }
 
     @PostMapping("/invoices/create")
@@ -47,7 +50,6 @@ public class InvoiceController extends BaseController {
         invoice.setOwnerId(owner.getId());
 
         CustomerModel customer = customerService.findCustomerByDocumentAndOwnerId(invoice.getCustomerDocument(), owner.getId());
-        log.info("******* customer: {} ", customer);
 
         try {
             invoice.setCustomer(customer);
