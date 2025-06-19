@@ -52,7 +52,7 @@ public class InvoiceController extends BaseController {
         try {
             invoice.setCustomer(customer);
             invoiceService.createInvoice(invoice);
-            return ResponseEntity.status(HttpStatus.CREATED).body("Invoice created");
+            return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (InternalException e) {
             throw new InternalException("Failed creating Invoice: " + e.getMessage());
         }

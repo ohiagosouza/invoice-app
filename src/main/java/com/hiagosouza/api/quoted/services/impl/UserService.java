@@ -24,19 +24,16 @@ public class UserService {
     }
 
     private final BCryptPasswordEncoder bCryptPassword = new BCryptPasswordEncoder();
-    
+
     public void createUser(UserModel user) {
 
         if (user.getDocument() != null
                 && findByDocument(user.getDocument()) == null
                 && findByEmail(user.getEmail()) == null) {
             log.info("***** Creating user with document: {} *****", user.getDocument());
-            String encryptedPassword = bCryptPassword.encode(user.getPassword());
-            user.setPassword(encryptedPassword);
-            String cleanedDocument = DocumentUtils.cleanDocument(user.getDocument());
-            user.setDocument(cleanedDocument);
-            String cleanedPhone = PhoneUtils.cleanPhoneNumber(user.getPhoneNumber());
-            user.setPhoneNumber(cleanedPhone);
+            user.setPassword(bCryptPassword.encode(user.getPassword()));
+            user.setDocument(DocumentUtils.cleanDocument(user.getDocument()));
+            user.setPhoneNumber(PhoneUtils.cleanPhoneNumber(user.getPhoneNumber()));
             user.setUserRoles(List.of(UserRole.USER));
             user.setCreatedAt(LocalDateTime.now());
             user.setUpdatedAt(LocalDateTime.now());
@@ -45,6 +42,25 @@ public class UserService {
             log.error("***** User not created, either null or already exists: {} *****", user.getDocument());
             throw new IllegalArgumentException("User not created");
         }
+    }
+
+    public void updateUser(UserModel user) {
+        UserModel userToUpdate = findByDocument(user.getDocument());
+
+        if (userToUpdate == null) {
+            log.error("***** User not found for update: {} *****", user.getDocument());
+            throw new IllegalArgumentException("User not found");
+        }
+
+        userToUpdate.setPassword(bCryptPassword.encode(user.getPassword()));
+        userToUpdate.setDocument(DocumentUtils.cleanDocument(user.getDocument()));
+        userToUpdate.setPhoneNumber(PhoneUtils.cleanPhoneNumber(user.getPhoneNumber()));
+        userToUpdate.setEmail(user.getEmail());
+        userToUpdate.setAddress(user.getAddress());
+        userToUpdate.setUpdatedAt(LocalDateTime.now());
+
+        log.info("***** Updated user with document: {} *****", user.getDocument());
+        userRepository.save(userToUpdate);
     }
 
     public UserModel findByDocument(String document) {

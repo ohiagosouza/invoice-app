@@ -51,4 +51,17 @@ public class UserController extends BaseController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
+
+    @PutMapping("/user/update")
+    public ResponseEntity<UserResponse> updateUser(@Valid @RequestBody UserRequest user) {
+        UserModel userModel = UserMapper.toModel(user);
+
+        try {
+            userService.updateUser(userModel);
+        } catch (IllegalArgumentException e) {
+            log.error("***** User update failed: {} *****", e.getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 }
