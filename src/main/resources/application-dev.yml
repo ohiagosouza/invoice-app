@@ -1,5 +1,10 @@
 spring:
   data:
     mongodb:
-      uri: mongodb://localhost:27017/quoted-db
-
+      uri: mongodb://mongodb:27017/quoted-db
+logging:
+  level:
+    root: DEBUG
+    mongo: WARN
+profiles:
+  active: dev

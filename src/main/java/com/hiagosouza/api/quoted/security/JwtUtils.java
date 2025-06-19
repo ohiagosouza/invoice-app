@@ -2,6 +2,7 @@ package com.hiagosouza.api.quoted.security;
 
 
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,15 +17,15 @@ import java.util.concurrent.TimeUnit;
 
 @Component
 public class JwtUtils {
-    @Value("${jwt.secretKey}")
+    @Value("${JWT_SECRET_KEY}")
     private String secretKey;
 
     private Key signingKey;
 
     @PostConstruct
-    public void init() {
+    public Key getSigningKey() {
         byte[] keyBytes = secretKey.getBytes(StandardCharsets.UTF_8);
-        this.signingKey = Keys.hmacShaKeyFor(keyBytes);
+        return this.signingKey = Keys.hmacShaKeyFor(keyBytes);
     }
 
     public String generateToken(String username) {
@@ -35,7 +36,7 @@ public class JwtUtils {
                 .subject(username)
                 .issuedAt(now)
                 .expiration(expirationDate)
-                .signWith(signingKey)
+                .signWith(getSigningKey())
                 .compact();
     }
 
@@ -45,7 +46,7 @@ public class JwtUtils {
 
     public String extractUsername(String token) {
         return Jwts.parser()
-                .verifyWith((SecretKey) signingKey)
+                .verifyWith((SecretKey) getSigningKey())
                 .build()
                 .parseSignedClaims(token)
                 .getPayload()
@@ -55,7 +56,7 @@ public class JwtUtils {
     public boolean isTokenExpired(String token) {
         try {
             Date expiration = Jwts.parser()
-                    .verifyWith((SecretKey) signingKey)
+                    .verifyWith((SecretKey) getSigningKey())
                     .build()
                     .parseSignedClaims(token)
                     .getPayload()

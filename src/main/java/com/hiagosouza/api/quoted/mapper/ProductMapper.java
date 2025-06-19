@@ -20,18 +20,4 @@ public class ProductMapper {
 
         return productModel;
     }
-
-    public static ProductModel toList(ProductModel product) {
-        ProductModel productModel = new ProductModel();
-        productModel.setId(product.getId());
-        productModel.setProductName(product.getProductName());
-        productModel.setDescription(product.getDescription());
-        productModel.setPrice(product.getPrice());
-        productModel.setCategory(product.getCategory());
-        productModel.setStock(product.getStock());
-        productModel.setCreatedAt(product.getCreatedAt());
-        productModel.setUpdatedAt(product.getUpdatedAt());
-
-        return productModel;
-    }
 }
