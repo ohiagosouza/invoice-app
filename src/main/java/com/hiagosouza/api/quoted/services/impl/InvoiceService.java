@@ -22,7 +22,7 @@ public class InvoiceService {
 
     public InvoiceModel createInvoice(InvoiceModel invoice) {
         if (invoice != null) {
-            Integer invoiceId = invoiceRepository.countInvoiceByOwnerId(invoice.getOwnerId());
+            int invoiceId = invoiceRepository.countInvoiceByOwnerId(invoice.getOwnerId()) + 1;
             invoice.setInvoiceId("INV-" + invoiceId);
             invoice.setInvoiceStatus(InvoiceStatus.CREATED);
             invoice.setCreatedAt(LocalDateTime.now());
