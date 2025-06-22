@@ -16,6 +16,7 @@ public class CustomerModel {
     private String id;
     @NotNull
     private String name;
+    private String customerType;
     private String phoneNumber;
     private String email;
     @NotNull
