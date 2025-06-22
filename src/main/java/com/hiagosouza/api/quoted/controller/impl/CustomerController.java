@@ -11,6 +11,7 @@ import com.hiagosouza.api.quoted.services.impl.CustomerService;
 import com.hiagosouza.api.quoted.services.impl.UserService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Role;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.hiagosouza.api.quoted.enums.UserRole.USER;
 
 @RestController
 @Slf4j
@@ -36,8 +39,7 @@ public class CustomerController extends BaseController {
     @PostMapping("/customers/register")
     public ResponseEntity<CustomerResponse> createCustomer(@Valid @RequestBody CustomerRequest customer) {
         CustomerModel customerModel = CustomerMapper.toModel(customer);
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
+        String email = AuthUtils.getAuthenticatedUserEmail();
 
         if (email != null) {
             UserModel user = userService.findByEmail(email);

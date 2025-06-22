@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ProductRepository extends MongoRepository<ProductModel, UUID> {
+    ProductModel findByIdAndOwnerId(String productId, String ownerId);
     ProductModel findByProductName(String name);
     List<ProductModel> findByProductNameStartingWithIgnoreCase(String prefix);
 

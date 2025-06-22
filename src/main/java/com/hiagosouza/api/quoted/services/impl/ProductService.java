@@ -1,5 +1,6 @@
 package com.hiagosouza.api.quoted.services.impl;
 
+import com.hiagosouza.api.quoted.model.ProductItem;
 import com.hiagosouza.api.quoted.model.ProductModel;
 import com.hiagosouza.api.quoted.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,14 @@ public class ProductService {
     public ProductModel findByName(String productName) {
         if (productName != null) {
             return productRepository.findByProductName(productName);
+        } else {
+            throw new IllegalArgumentException("Product not found");
+        }
+    }
+
+    public ProductModel findProductById(String productId, String ownerId) {
+        if (productId != null) {
+            return productRepository.findByIdAndOwnerId(productId, ownerId);
         } else {
             throw new IllegalArgumentException("Product not found");
         }

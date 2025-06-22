@@ -400,6 +400,8 @@ components:
       properties:
         id: { type: string }
         name: { type: string }
+        customerType:
+          type: string
         phoneNumber: { type: string }
         email: { type: string }
         document: { type: string }
@@ -464,7 +466,7 @@ components:
         items:
           type: array
           items:
-            $ref: '#/components/schemas/ProductItem'
+            $ref: '#/components/schemas/InvoiceProductRequest'
 
     InvoiceResponse:
       type: object
@@ -485,3 +487,14 @@ components:
         total: { type: number, format: double }
         createdAt: { type: string, format: date-time }
         updatedAt: { type: string, format: date-time }
+
+    InvoiceProductRequest:
+      type: object
+      properties:
+        productId:
+          type: string
+        quantity:
+          type: integer
+      required:
+        - productId
+        - quantity

@@ -18,7 +18,6 @@ public class UserMapper {
         userModel.setEmail(user.getEmail());
         userModel.setPassword(user.getPassword());
         userModel.setDocument(user.getDocument());
-        userModel.setUserRoles(List.of(UserRole.USER)); // Default role set to USER
         userModel.setPlanType(PlanType.valueOf(user.getPlanType().name()));
         userModel.setStatus(UserStatus.valueOf(user.getStatus().name()));
         userModel.setCreatedAt(user.getCreatedAt());

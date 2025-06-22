@@ -8,7 +8,5 @@ spring:
   data:
     mongodb:
       uri: ${SPRING_DATA_MONGODB_URI}
-jwt:
-  secretKey: 10327fa888a10c778b96f1d793e14b8412da265ee520933df8addbb5063f0db95a47a8cc3c6c13acdb5666a7ba9dcc05a37422d570cf18e4eeb8873befa47c26
 server:
   port: 8080
