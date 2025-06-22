@@ -13,13 +13,8 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.webjars.NotFoundException;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 @RestController
 @Log4j2
@@ -54,6 +49,24 @@ public class UserController extends BaseController {
             return ResponseEntity.status(HttpStatus.OK).body(user);
         } catch (NotFoundException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+    @PatchMapping("/user/update")
+    public ResponseEntity<UserResponse> updateUser(@Valid @RequestBody UserRequest user) {
+        String email = AuthUtils.getAuthenticatedUserEmail();
+
+        if(email != null) {
+            UserModel existingUser = userService.findByEmail(email);
+            if (existingUser != null) {
+                UserModel userToUpdate = UserMapper.toModel(user);
+                userToUpdate.setId(existingUser.getId());
+                userService.updateUserInformation(userToUpdate);
+            }
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } else {
+            log.error("***** User not authenticated *****");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
 }

@@ -2,4 +2,9 @@ spring:
   data:
     mongodb:
       uri: mongodb://mongodb:27017/quoted-db
-
+logging:
+  level:
+    root: INFO
+    mongo: WARN
+profiles:
+  active: prod

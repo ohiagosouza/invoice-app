@@ -56,8 +56,7 @@ public class ProductsController extends BaseController {
 
     @GetMapping("/products/search")
     public ResponseEntity<?> searchProducts(@RequestParam String prefix) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
+        String email = AuthUtils.getAuthenticatedUserEmail();
 
         if (email != null) {
             UserModel user = userService.findByEmail(email);
@@ -70,4 +69,17 @@ public class ProductsController extends BaseController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found");
         }
     }
+
+//    public ResponseEntity<?> findProductById(@RequestBody String id) {
+//        String email = AuthUtils.getAuthenticatedUserEmail();
+//
+//        if (email != null) {
+//            UserModel user = userService.findByEmail(email);
+//            ProductModel product = productService.findProductById(id, user.getId());
+//
+//            return ResponseEntity.status(HttpStatus.OK).body(product);
+//        } else {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+//        }
+//    }
 }

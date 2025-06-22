@@ -12,7 +12,8 @@ services:
       - mongodb
     environment:
       SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/quoted-db
-      SPRING_PROFILES_ACTIVE: dev
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+      SPRING_PROFILES_ACTIVE: prod
   mongodb:
     image: mongo:6
     container_name: mongo
