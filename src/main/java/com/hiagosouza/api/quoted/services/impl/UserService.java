@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -31,6 +32,7 @@ public class UserService {
                 && findByDocument(user.getDocument()) == null
                 && findByEmail(user.getEmail()) == null) {
             log.info("***** Creating user with document: {} *****", user.getDocument());
+            user.setId(UUID.randomUUID().toString());
             user.setPassword(bCryptPassword.encode(user.getPassword()));
             user.setDocument(DocumentUtils.cleanDocument(user.getDocument()));
             user.setPhoneNumber(PhoneUtils.cleanPhoneNumber(user.getPhoneNumber()));
@@ -46,8 +48,9 @@ public class UserService {
 
     public void updateUserInformation(UserModel user) {
         UserModel userToUpdate = findById(user.getId());
+        userToUpdate.setId(user.getId());
 
-        if (userToUpdate == null) {
+        if (userToUpdate.getId() == null) {
             log.error("***** User not found for update: {} *****", user.getDocument());
             throw new IllegalArgumentException("User not found");
         }

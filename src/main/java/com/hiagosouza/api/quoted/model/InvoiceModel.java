@@ -24,7 +24,7 @@ public class InvoiceModel {
     private CustomerModel customer;
     @Schema(description = "Plan Type", example = "FREE", allowableValues = { "CREATED", "ACCEPTED", "REJECTED", "OVERDUE", "PAID", "CANCELLED" })
     private InvoiceStatus invoiceStatus;
-    private List<InvoiceProductRequest> items;
+    private List<InvoiceProductRequest> products;
     private Double tax;
     private Double subtotal;
     private Double discount;

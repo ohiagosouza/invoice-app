@@ -1,7 +1,6 @@
 package com.hiagosouza.api.quoted.controller.impl;
 
 import com.hiagosouza.api.quoted.controller.BaseController;
-import com.hiagosouza.api.quoted.mapper.CustomerMapper;
 import com.hiagosouza.api.quoted.mapper.InvoiceMapper;
 import com.hiagosouza.api.quoted.model.*;
 import com.hiagosouza.api.quoted.security.AuthUtils;
@@ -12,19 +11,10 @@ import com.hiagosouza.api.quoted.services.impl.UserService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.InternalException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.ErrorResponseException;
 import org.springframework.web.bind.annotation.*;
-import org.webjars.NotFoundException;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -66,11 +56,12 @@ public class InvoiceController extends BaseController {
         String email = AuthUtils.getAuthenticatedUserEmail();
         UserModel owner = userService.findByEmail(email);
 
-        try {
-            InvoiceModel invoice = invoiceService.findByInvoiceId(id, owner.getId());
+        InvoiceModel invoice = invoiceService.findInvoice(id, owner.getId());
+
+        if(invoice != null) {
             return ResponseEntity.status(HttpStatus.OK).body(invoice);
-        } catch (NotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Invoice not Found: " + e.getMessage());
+        } else  {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 }

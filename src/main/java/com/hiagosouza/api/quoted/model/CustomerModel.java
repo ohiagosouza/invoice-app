@@ -1,5 +1,6 @@
 package com.hiagosouza.api.quoted.model;
 
+import com.hiagosouza.api.quoted.enums.CustomerType;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,7 +17,7 @@ public class CustomerModel {
     private String id;
     @NotNull
     private String name;
-    private String customerType;
+    private CustomerType customerType;
     private String phoneNumber;
     private String email;
     @NotNull

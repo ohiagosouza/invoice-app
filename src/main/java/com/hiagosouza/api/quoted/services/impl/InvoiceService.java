@@ -4,8 +4,6 @@ import com.hiagosouza.api.quoted.enums.InvoiceStatus;
 import com.hiagosouza.api.quoted.model.*;
 import com.hiagosouza.api.quoted.repository.InvoiceRepository;
 import com.hiagosouza.api.quoted.security.AuthUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
@@ -30,7 +28,7 @@ public class InvoiceService {
         if (invoice != null) {
             UserModel owner = userService.findByEmail(email);
             int invoiceId = invoiceRepository.countInvoiceByOwnerId(invoice.getOwnerId()) + 1;
-            List<ProductItem> productItems = invoice.getItems().stream().map(itemRequest -> {
+            List<ProductItem> productItems = invoice.getProducts().stream().map(itemRequest -> {
                 ProductModel product = productService.findProductById(itemRequest.getProductId(), owner.getId());
                 ProductItem productItem = new ProductItem();
                 productItem.setProductId(product.getId());
@@ -57,7 +55,7 @@ public class InvoiceService {
     }
 
 
-    public InvoiceModel findByInvoiceId(String invoiceId, String ownerId) {
+    public InvoiceModel findInvoice(String invoiceId, String ownerId) {
         try {
             return invoiceRepository.findByInvoiceIdAndOwnerId(invoiceId, ownerId);
         } catch (NotFoundException e) {

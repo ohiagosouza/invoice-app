@@ -11,6 +11,7 @@ import org.webjars.NotFoundException;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -25,6 +26,7 @@ public class CustomerService {
     public void createCustomer(CustomerModel customer) {
         if (customer.getDocument() != null && customerRepository.findByDocument(customer.getDocument()) == null) {
             log.info("***** Creating customer with document: {} *****", customer.getDocument());
+            customer.setId(UUID.randomUUID().toString());
             String cleanedDocument = DocumentUtils.cleanDocument(customer.getDocument());
             customer.setDocument(cleanedDocument);
             String cleanedPhone = PhoneUtils.cleanPhoneNumber(customer.getPhoneNumber());
