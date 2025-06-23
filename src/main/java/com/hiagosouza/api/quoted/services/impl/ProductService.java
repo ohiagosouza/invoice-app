@@ -1,12 +1,13 @@
 package com.hiagosouza.api.quoted.services.impl;
 
-import com.hiagosouza.api.quoted.model.ProductItem;
 import com.hiagosouza.api.quoted.model.ProductModel;
 import com.hiagosouza.api.quoted.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class ProductService {
@@ -15,6 +16,9 @@ public class ProductService {
 
     public ProductModel createProduct(ProductModel product) {
         if(product != null && findByName(product.getProductName()) == null) {
+            product.setId(UUID.randomUUID().toString());
+            product.setCreatedAt(LocalDateTime.now());
+            product.setUpdatedAt(LocalDateTime.now());
             return productRepository.save(product);
         } else {
             throw new IllegalArgumentException("Product name cannot be null or empty");

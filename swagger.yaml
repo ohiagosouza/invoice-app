@@ -463,7 +463,7 @@ components:
         subtotal: { type: number, format: double }
         discount: { type: number, format: double }
         total: { type: number, format: double }
-        items:
+        products:
           type: array
           items:
             $ref: '#/components/schemas/InvoiceProductRequest'

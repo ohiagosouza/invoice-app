@@ -13,11 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -35,8 +32,6 @@ public class ProductsController extends BaseController {
     public ResponseEntity<?> createProduct(@Valid @RequestBody Product product) {
         log.info("Creating product: {}", product.getProductName());
         ProductModel productModel = ProductMapper.toModel(product);
-        productModel.setCreatedAt(LocalDateTime.now());
-        productModel.setUpdatedAt(LocalDateTime.now());
 
         String email = AuthUtils.getAuthenticatedUserEmail();
 
@@ -70,16 +65,17 @@ public class ProductsController extends BaseController {
         }
     }
 
-//    public ResponseEntity<?> findProductById(@RequestBody String id) {
-//        String email = AuthUtils.getAuthenticatedUserEmail();
-//
-//        if (email != null) {
-//            UserModel user = userService.findByEmail(email);
-//            ProductModel product = productService.findProductById(id, user.getId());
-//
-//            return ResponseEntity.status(HttpStatus.OK).body(product);
-//        } else {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-//        }
-//    }
+    @GetMapping("/products/{id}")
+    public ResponseEntity<?> findProductById(@PathVariable String id) {
+        String email = AuthUtils.getAuthenticatedUserEmail();
+
+        if (email != null) {
+            UserModel user = userService.findByEmail(email);
+            ProductModel product = productService.findProductById(id, user.getId());
+
+            return ResponseEntity.status(HttpStatus.OK).body(product);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
 }

@@ -1,6 +1,7 @@
 package com.hiagosouza.api.quoted.controller.impl;
 
 import com.hiagosouza.api.quoted.controller.BaseController;
+import com.hiagosouza.api.quoted.enums.CustomerType;
 import com.hiagosouza.api.quoted.mapper.CustomerMapper;
 import com.hiagosouza.api.quoted.model.CustomerModel;
 import com.hiagosouza.api.quoted.model.CustomerRequest;
@@ -11,18 +12,12 @@ import com.hiagosouza.api.quoted.services.impl.CustomerService;
 import com.hiagosouza.api.quoted.services.impl.UserService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Role;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.hiagosouza.api.quoted.enums.UserRole.USER;
 
 @RestController
 @Slf4j
@@ -44,6 +39,7 @@ public class CustomerController extends BaseController {
         if (email != null) {
             UserModel user = userService.findByEmail(email);
             customerModel.setOwnerId(user.getId());
+            customerModel.setCustomerType(CustomerType.valueOf(customer.getCustomerType()));
         }
 
         try {
@@ -62,6 +58,20 @@ public class CustomerController extends BaseController {
             UserModel owner = userService.findByEmail(email);
             List<CustomerModel> customerList = new ArrayList<>(customerService.getCustomers(owner.getId()));
             return ResponseEntity.status(HttpStatus.OK).body(customerList);
+        } else {
+            log.error("***** No authentication found in context *****");
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+    }
+
+    @GetMapping("/customers/{document}")
+    public ResponseEntity<?> getCustomer(@PathVariable String document) {
+        String email = AuthUtils.getAuthenticatedUserEmail();
+
+        if(email != null) {
+            UserModel owner = userService.findByEmail(email);
+            CustomerModel customer = customerService.findCustomerByDocumentAndOwnerId(document, owner.getId());
+            return ResponseEntity.status(HttpStatus.OK).body(customer);
         } else {
             log.error("***** No authentication found in context *****");
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

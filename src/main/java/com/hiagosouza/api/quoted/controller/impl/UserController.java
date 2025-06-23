@@ -1,7 +1,6 @@
 package com.hiagosouza.api.quoted.controller.impl;
 
 import com.hiagosouza.api.quoted.controller.BaseController;
-import com.hiagosouza.api.quoted.enums.UserRole;
 import com.hiagosouza.api.quoted.mapper.UserMapper;
 import com.hiagosouza.api.quoted.model.UserRequest;
 import com.hiagosouza.api.quoted.model.UserModel;
@@ -60,7 +59,6 @@ public class UserController extends BaseController {
             UserModel existingUser = userService.findByEmail(email);
             if (existingUser != null) {
                 UserModel userToUpdate = UserMapper.toModel(user);
-                userToUpdate.setId(existingUser.getId());
                 userService.updateUserInformation(userToUpdate);
             }
             return ResponseEntity.status(HttpStatus.OK).build();

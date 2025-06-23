@@ -5,9 +5,7 @@ import com.hiagosouza.api.quoted.model.*;
 public class CustomerMapper {
     public static CustomerModel toModel(CustomerRequest customer) {
         CustomerModel customerModel = new CustomerModel();
-        customerModel.setId(customer.getId());
         customerModel.setName(customer.getName());
-        customerModel.setCustomerType(customer.getCustomerType());
         customerModel.setPhoneNumber(customer.getPhoneNumber());
         customerModel.setOwnerId(customer.getId());
         customerModel.setEmail(customer.getEmail());
