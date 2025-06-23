@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Document(collection = "products")
@@ -20,7 +21,7 @@ public class ProductModel {
     private String ownerId;
     private String description;
     @NotNull
-    private Double price;
+    private BigDecimal price;
     @NotNull
     private String category;
     @NotNull

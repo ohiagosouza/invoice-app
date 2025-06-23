@@ -1,7 +1,7 @@
 package com.hiagosouza.api.quoted.controller.impl;
 
 import com.hiagosouza.api.quoted.controller.BaseController;
-import com.hiagosouza.api.quoted.mapper.UserMapper;
+import com.hiagosouza.api.quoted.mapper.user.UserMapper;
 import com.hiagosouza.api.quoted.model.UserRequest;
 import com.hiagosouza.api.quoted.model.UserModel;
 import com.hiagosouza.api.quoted.model.UserResponse;

@@ -1,5 +1,6 @@
 package com.hiagosouza.api.quoted.model;
 
+import com.hiagosouza.api.quoted.dtos.invoice.InvoiceProductRequestDTO;
 import com.hiagosouza.api.quoted.enums.InvoiceStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
@@ -24,7 +25,7 @@ public class InvoiceModel {
     private CustomerModel customer;
     @Schema(description = "Plan Type", example = "FREE", allowableValues = { "CREATED", "ACCEPTED", "REJECTED", "OVERDUE", "PAID", "CANCELLED" })
     private InvoiceStatus invoiceStatus;
-    private List<InvoiceProductRequest> products;
+    private List<InvoiceProductRequestDTO> products;
     private Double tax;
     private Double subtotal;
     private Double discount;

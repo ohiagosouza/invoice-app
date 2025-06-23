@@ -2,7 +2,7 @@ package com.hiagosouza.api.quoted.controller.impl;
 
 import com.hiagosouza.api.quoted.controller.BaseController;
 import com.hiagosouza.api.quoted.enums.CustomerType;
-import com.hiagosouza.api.quoted.mapper.CustomerMapper;
+import com.hiagosouza.api.quoted.mapper.customer.CustomerMapper;
 import com.hiagosouza.api.quoted.model.CustomerModel;
 import com.hiagosouza.api.quoted.model.CustomerRequest;
 import com.hiagosouza.api.quoted.model.CustomerResponse;

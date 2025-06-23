@@ -1,4 +1,4 @@
-package com.hiagosouza.api.quoted.mapper;
+package com.hiagosouza.api.quoted.mapper.user;
 
 import com.hiagosouza.api.quoted.model.AddressModel;
 import com.hiagosouza.api.quoted.model.UserModel;

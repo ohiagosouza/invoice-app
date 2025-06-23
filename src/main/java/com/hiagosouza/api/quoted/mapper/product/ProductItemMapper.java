@@ -1,4 +1,4 @@
-package com.hiagosouza.api.quoted.mapper;
+package com.hiagosouza.api.quoted.mapper.product;
 
 import com.hiagosouza.api.quoted.model.Product;
 import com.hiagosouza.api.quoted.model.ProductModel;

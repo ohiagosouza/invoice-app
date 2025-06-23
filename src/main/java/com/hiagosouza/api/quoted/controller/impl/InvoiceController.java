@@ -1,7 +1,9 @@
 package com.hiagosouza.api.quoted.controller.impl;
 
 import com.hiagosouza.api.quoted.controller.BaseController;
-import com.hiagosouza.api.quoted.mapper.InvoiceMapper;
+import com.hiagosouza.api.quoted.dtos.invoice.InvoiceRequestDTO;
+import com.hiagosouza.api.quoted.dtos.invoice.InvoiceResponseDTO;
+import com.hiagosouza.api.quoted.mapper.invoice.InvoiceMapper;
 import com.hiagosouza.api.quoted.model.*;
 import com.hiagosouza.api.quoted.security.AuthUtils;
 import com.hiagosouza.api.quoted.services.impl.CustomerService;
@@ -33,7 +35,7 @@ public class InvoiceController extends BaseController {
     }
 
     @PostMapping("/invoices/create")
-    public ResponseEntity<?> createInvoice(@Valid @RequestBody InvoiceRequest request) {
+    public ResponseEntity<InvoiceResponseDTO> createInvoice(@Valid @RequestBody InvoiceRequestDTO request) {
         InvoiceModel invoice = InvoiceMapper.toModel(request);
         String email = AuthUtils.getAuthenticatedUserEmail();
         UserModel owner = userService.findByEmail(email);
