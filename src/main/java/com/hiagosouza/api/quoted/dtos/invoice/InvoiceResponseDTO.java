@@ -14,10 +14,10 @@ public class InvoiceResponseDTO {
     private String id;
     private CustomerModel customer;
     private InvoiceStatus status;
-    private Double tax;
+    private BigDecimal tax;
     private BigDecimal subtotal;
     private List<InvoiceProductResponseDTO> products;
-    private Double discount;
+    private BigDecimal discount;
     private BigDecimal total;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

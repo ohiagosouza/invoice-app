@@ -3,7 +3,6 @@ package com.hiagosouza.api.quoted.controller.impl;
 import com.hiagosouza.api.quoted.controller.BaseController;
 import com.hiagosouza.api.quoted.dtos.invoice.InvoiceRequestDTO;
 import com.hiagosouza.api.quoted.dtos.invoice.InvoiceResponseDTO;
-import com.hiagosouza.api.quoted.mapper.invoice.InvoiceMapper;
 import com.hiagosouza.api.quoted.model.*;
 import com.hiagosouza.api.quoted.security.AuthUtils;
 import com.hiagosouza.api.quoted.services.impl.CustomerService;
@@ -36,16 +35,8 @@ public class InvoiceController extends BaseController {
 
     @PostMapping("/invoices/create")
     public ResponseEntity<InvoiceResponseDTO> createInvoice(@Valid @RequestBody InvoiceRequestDTO request) {
-        InvoiceModel invoice = InvoiceMapper.toModel(request);
-        String email = AuthUtils.getAuthenticatedUserEmail();
-        UserModel owner = userService.findByEmail(email);
-        invoice.setOwnerId(owner.getId());
-
-        CustomerModel customer = customerService.findCustomerByDocumentAndOwnerId(invoice.getCustomerDocument(), owner.getId());
-
         try {
-            invoice.setCustomer(customer);
-            invoiceService.createInvoice(invoice);
+            invoiceService.createInvoice(request);
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (InternalException e) {
             throw new InternalException("Failed creating Invoice: " + e.getMessage());
@@ -58,7 +49,7 @@ public class InvoiceController extends BaseController {
         String email = AuthUtils.getAuthenticatedUserEmail();
         UserModel owner = userService.findByEmail(email);
 
-        InvoiceModel invoice = invoiceService.findInvoice(id, owner.getId());
+        InvoiceResponseDTO invoice = invoiceService.findInvoice(id, owner.getId());
 
         if(invoice != null) {
             return ResponseEntity.status(HttpStatus.OK).body(invoice);

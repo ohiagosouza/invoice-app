@@ -1,6 +1,5 @@
 package com.hiagosouza.api.quoted.model;
 
-import com.hiagosouza.api.quoted.dtos.invoice.InvoiceProductRequestDTO;
 import com.hiagosouza.api.quoted.enums.InvoiceStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
@@ -9,6 +8,7 @@ import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -17,6 +17,7 @@ import java.util.List;
 @Setter
 public class InvoiceModel {
     @Id
+    private String id;
     private String invoiceId;
     @NotNull
     private String ownerId;
@@ -25,11 +26,11 @@ public class InvoiceModel {
     private CustomerModel customer;
     @Schema(description = "Plan Type", example = "FREE", allowableValues = { "CREATED", "ACCEPTED", "REJECTED", "OVERDUE", "PAID", "CANCELLED" })
     private InvoiceStatus invoiceStatus;
-    private List<InvoiceProductRequestDTO> products;
-    private Double tax;
-    private Double subtotal;
-    private Double discount;
-    private Double total;
+    private List<InvoiceProductModel> products;
+    private BigDecimal tax;
+    private BigDecimal subtotal;
+    private BigDecimal discount;
+    private BigDecimal total;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 

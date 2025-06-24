@@ -14,8 +14,8 @@ public class InvoiceRequestDTO {
     private String customerDocument;
     private List<InvoiceProductRequestDTO> products;
     private InvoiceStatus invoiceStatus;
-    private Double tax;
-    private Double discount;
+    private BigDecimal tax;
+    private BigDecimal discount;
     private BigDecimal total;
     private BigDecimal subtotal;
     private LocalDateTime createdAt;

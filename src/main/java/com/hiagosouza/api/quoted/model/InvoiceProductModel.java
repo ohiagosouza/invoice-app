@@ -10,7 +10,11 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 public class InvoiceProductModel {
-    private ProductModel product;
-    private int quantity;
+    private String productId;
+    private String productName;
+    private String description;
+    private Integer quantity;
+    private String category;
+    private BigDecimal unitPrice;
     private BigDecimal subtotal;
 }
