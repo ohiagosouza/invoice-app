@@ -37,11 +37,10 @@ public class InvoiceController extends BaseController {
     public ResponseEntity<InvoiceResponseDTO> createInvoice(@Valid @RequestBody InvoiceRequestDTO request) {
         try {
             invoiceService.createInvoice(request);
-            return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (InternalException e) {
             throw new InternalException("Failed creating Invoice: " + e.getMessage());
         }
-
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping("/invoices/{id}")

@@ -11,9 +11,9 @@ import java.util.List;
 @Data
 public class InvoiceResponseDTO {
 
-    private String id;
+    private String invoiceId;
     private CustomerModel customer;
-    private InvoiceStatus status;
+    private InvoiceStatus invoiceStatus;
     private BigDecimal tax;
     private BigDecimal subtotal;
     private List<InvoiceProductResponseDTO> products;

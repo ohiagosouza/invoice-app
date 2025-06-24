@@ -16,11 +16,11 @@ public class InvoiceMapper {
 
     public static InvoiceResponseDTO toResponseDTO(InvoiceModel invoiceModel) {
         InvoiceResponseDTO responseDTO = new InvoiceResponseDTO();
-        responseDTO.setId(invoiceModel.getInvoiceId());
+        responseDTO.setInvoiceId(invoiceModel.getInvoiceId());
         responseDTO.setCustomer(invoiceModel.getCustomer());
         responseDTO.setTax(invoiceModel.getTax());
         responseDTO.setDiscount(invoiceModel.getDiscount());
-        responseDTO.setStatus(invoiceModel.getInvoiceStatus());
+        responseDTO.setInvoiceStatus(invoiceModel.getInvoiceStatus());
         responseDTO.setCreatedAt(invoiceModel.getCreatedAt());
         responseDTO.setUpdatedAt(invoiceModel.getUpdatedAt());
 
