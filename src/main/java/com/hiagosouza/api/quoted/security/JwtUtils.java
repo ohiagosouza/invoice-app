@@ -59,28 +59,21 @@ public class JwtUtils {
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
-        try {
-            return extractUsername(token).equals(userDetails.getUsername()) && !isTokenExpired(token);
-        } catch (SecurityException e) {
-            throw new SecurityException("Invalid JWT signature: " + e.getMessage());
-        } catch (MalformedJwtException e) {
-            throw new MalformedJwtException("Invalid JWT token: " + e.getMessage());
-        } catch (ExpiredJwtException e) {
-            throw new ExpiredJwtException(null, null, "JWT token is expired: " + e.getMessage());
-        } catch (UnsupportedJwtException e) {
-            throw new UnsupportedJwtException("JWT token is unsupported: " + e.getMessage());
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("JWT claims string is empty: " + e.getMessage());
-        }
+        return extractUsername(token).equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
 
     public String extractUsername(String token) {
-        return Jwts.parser()
-                .verifyWith((SecretKey) getSigningKey())
-                .build()
-                .parseSignedClaims(token)
-                .getPayload()
-                .getSubject();
+        try {
+            return Jwts.parser()
+                    .verifyWith((SecretKey) getSigningKey())
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload()
+                    .getSubject();
+        } catch (Exception e) {
+            throw new RuntimeException("***** JWT token validation failed *****");
+        }
+
     }
 
     public boolean isTokenExpired(String token) {

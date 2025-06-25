@@ -4,6 +4,8 @@ import com.hiagosouza.api.quoted.dtos.invoice.InvoiceRequestDTO;
 import com.hiagosouza.api.quoted.dtos.invoice.InvoiceResponseDTO;
 import com.hiagosouza.api.quoted.model.InvoiceModel;
 
+import java.util.Optional;
+
 public class InvoiceMapper {
     public static InvoiceModel toModel(InvoiceRequestDTO invoiceRequest) {
         InvoiceModel invoiceModel = new InvoiceModel();

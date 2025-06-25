@@ -3,11 +3,14 @@ package com.hiagosouza.api.quoted.services.impl;
 import com.hiagosouza.api.quoted.dtos.invoice.InvoiceProductRequestDTO;
 import com.hiagosouza.api.quoted.dtos.invoice.InvoiceRequestDTO;
 import com.hiagosouza.api.quoted.dtos.invoice.InvoiceResponseDTO;
+import com.hiagosouza.api.quoted.exception.NotFound;
 import com.hiagosouza.api.quoted.mapper.invoice.InvoiceMapper;
 import com.hiagosouza.api.quoted.mapper.invoice.InvoiceProductMapper;
 import com.hiagosouza.api.quoted.model.*;
 import com.hiagosouza.api.quoted.repository.InvoiceRepository;
 import com.hiagosouza.api.quoted.security.AuthUtils;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.logging.log4j.util.InternalException;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
@@ -15,9 +18,11 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@Slf4j
 public class InvoiceService {
     private final InvoiceRepository invoiceRepository;
     private final ProductService productService;
@@ -56,7 +61,6 @@ public class InvoiceService {
         CustomerModel customer = customerService.findCustomerByDocumentAndOwnerId(invoiceRequestDTO.getCustomerDocument(), owner.getId());
 
         InvoiceModel invoiceModel = InvoiceMapper.toModel(invoiceRequestDTO);
-        invoiceModel.setId(UUID.randomUUID().toString());
         invoiceModel.setInvoiceId("INV-" + invoiceId);
         invoiceModel.setProducts(productItems);
         invoiceModel.setCustomer(customer);
@@ -65,18 +69,23 @@ public class InvoiceService {
         invoiceModel.setTotal(subtotal.subtract(discount));
         invoiceModel.setCreatedAt(LocalDateTime.now());
         invoiceModel.setUpdatedAt(LocalDateTime.now());
-
-        InvoiceModel saved = invoiceRepository.save(invoiceModel);
-        return InvoiceMapper.toResponseDTO(saved);
+        try {
+            InvoiceModel saved = invoiceRepository.save(invoiceModel);
+            return InvoiceMapper.toResponseDTO(saved);
+        } catch (
+                Exception e) {
+            log.info("***** Failed creating Invoice *****");
+            throw new InternalException("Failed creating Invoice: " + e.getMessage());
+        }
     }
 
 
     public InvoiceResponseDTO findInvoice(String invoiceId, String ownerId) {
-        try {
-            return invoiceRepository.findByInvoiceIdAndOwnerId(invoiceId, ownerId);
-        } catch (NotFoundException e) {
-            throw new NotFoundException("Invoice not found " + e.getMessage());
+        InvoiceModel invoiceModel = invoiceRepository.findByInvoiceIdAndOwnerId(invoiceId, ownerId);
+        if (invoiceModel == null) {
+            throw new NotFound("Invoice not found for user: ", ownerId);
         }
+        return InvoiceMapper.toResponseDTO(invoiceModel);
     }
 
 }

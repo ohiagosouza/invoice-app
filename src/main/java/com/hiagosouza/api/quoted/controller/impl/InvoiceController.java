@@ -3,6 +3,7 @@ package com.hiagosouza.api.quoted.controller.impl;
 import com.hiagosouza.api.quoted.controller.BaseController;
 import com.hiagosouza.api.quoted.dtos.invoice.InvoiceRequestDTO;
 import com.hiagosouza.api.quoted.dtos.invoice.InvoiceResponseDTO;
+import com.hiagosouza.api.quoted.enums.InvoiceStatus;
 import com.hiagosouza.api.quoted.model.*;
 import com.hiagosouza.api.quoted.security.AuthUtils;
 import com.hiagosouza.api.quoted.services.impl.CustomerService;
@@ -11,7 +12,6 @@ import com.hiagosouza.api.quoted.services.impl.ProductService;
 import com.hiagosouza.api.quoted.services.impl.UserService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.logging.log4j.util.InternalException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,13 +34,13 @@ public class InvoiceController extends BaseController {
     }
 
     @PostMapping("/invoices/create")
-    public ResponseEntity<InvoiceResponseDTO> createInvoice(@Valid @RequestBody InvoiceRequestDTO request) {
-        try {
+    public ResponseEntity<?> createInvoice(@Valid @RequestBody InvoiceRequestDTO request) {
+        try{
             invoiceService.createInvoice(request);
-        } catch (InternalException e) {
-            throw new InternalException("Failed creating Invoice: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.CREATED).body("Invoice Created Successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Invoice Creation Failed: " + e.getMessage());
         }
-        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping("/invoices/{id}")
@@ -50,10 +50,10 @@ public class InvoiceController extends BaseController {
 
         InvoiceResponseDTO invoice = invoiceService.findInvoice(id, owner.getId());
 
-        if(invoice != null) {
-            return ResponseEntity.status(HttpStatus.OK).body(invoice);
-        } else  {
+        if (invoice == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+        return ResponseEntity.status(HttpStatus.OK).body(invoice);
+
     }
 }
