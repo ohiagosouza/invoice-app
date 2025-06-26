@@ -53,8 +53,8 @@ public class ProductService {
     }
 
     public ProductModel findProductById(String productId, String ownerId) {
-        Optional<ProductModel> product = Optional.ofNullable(productRepository.findByIdAndOwnerId(productId, ownerId));
-        return product.orElseThrow(() -> new NotFound("Product not found with id: ", productId));
-
+        return productRepository.findByIdAndOwnerId(productId, ownerId)
+                .orElseThrow(() -> new NotFound("Product not found with id: ", productId));
+      //  return product.orElseThrow(() -> new NotFound("Product not found with id: ", productId));
     }
 }

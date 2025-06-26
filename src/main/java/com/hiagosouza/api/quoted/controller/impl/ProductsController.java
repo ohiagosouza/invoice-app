@@ -54,32 +54,36 @@ public class ProductsController extends BaseController {
     public ResponseEntity<?> findProductById(@PathVariable String id) {
         String email = AuthUtils.getAuthenticatedUserEmail();
 
-        if (email != null) {
-            UserModel user = userService.findByEmail(email);
-            Optional<ProductModel> product = Optional.ofNullable(productService.findProductById(id, user.getId()));
-
-            return ResponseEntity.status(HttpStatus.OK).body(product);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        /*
+         * Email nunca pode ser nulo
+         * */
+        if (email == null) {
+            throw new SecurityException("Email can't be null");
         }
+        UserModel user = userService.findByEmail(email);
+        Optional<ProductModel> product = Optional.ofNullable(productService.findProductById(id, user.getId()));
+
+        return ResponseEntity.status(HttpStatus.OK).body(product);
     }
 
     @GetMapping("/products/search/all")
     public ResponseEntity<?> searchAllProducts() {
         String email = AuthUtils.getAuthenticatedUserEmail();
 
-        if (email != null) {
-            UserModel user = userService.findByEmail(email);
-            List<ProductModel> products = productService.findAllByOwnerId(user.getId()).stream()
-                    .filter(owner -> Objects.equals(owner.getOwnerId(), user.getId())).toList();
-
-            return ResponseEntity.status(HttpStatus.OK).body(products);
-        } else {
-            log.error("All product search failed");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No products found");
+        if (email == null) {
+            throw new SecurityException("Email can't be null");
         }
+        UserModel user = userService.findByEmail(email);
+        List<ProductModel> products = productService.findAllByOwnerId(user.getId()).stream()
+                .filter(owner -> Objects.equals(owner.getOwnerId(), user.getId())).toList();
+
+        return ResponseEntity.status(HttpStatus.OK).body(products);
     }
 
+    /*
+     *
+     * Mudar o método de busca para retornar todos os produtos que contenham o prefixo no nome do produto
+     * */
     @GetMapping("/products/search/prefix")
     public ResponseEntity<?> searchProductsWithPrefix(@RequestParam String prefix) {
         String email = AuthUtils.getAuthenticatedUserEmail();
